@@ -14,6 +14,7 @@ namespace SanyaCards.Cards
     {
         private readonly float jumpDelay = 1.0f;
         private readonly float jumpSpeed = 3.0f;
+
         private float nextJumpTime = 0.0f;
         private Player player;
 
@@ -29,7 +30,7 @@ namespace SanyaCards.Cards
 
         public void Destroy()
         {
-            Destroy(this);
+            UnityEngine.Object.Destroy(this);
         }
 
         private void Update()
@@ -52,7 +53,7 @@ namespace SanyaCards.Cards
 
             cardInfo.allowMultiple = false;
 
-            block.cdMultiplier = 0.1f;
+            block.cdMultiplier = 0.3f;
         }
         public override void OnAddCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
@@ -98,15 +99,15 @@ namespace SanyaCards.Cards
                 {
                     positive = true,
                     stat = "BlockCooldown",
-                    amount = "10%",
-                    simepleAmount = CardInfoStat.SimpleAmount.aLotOf
+                    amount = "30%",
+                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 },
                 new CardInfoStat()
                 {
                     positive = false,
                     stat = "Health",
                     amount = "-50%",
-                    simepleAmount = CardInfoStat.SimpleAmount.aLotOf
+                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 }
             };
         }

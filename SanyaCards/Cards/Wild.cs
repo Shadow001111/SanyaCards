@@ -60,28 +60,28 @@ namespace SanyaCards.Cards
                     positive = true,
                     stat = "Bullet speed",
                     amount = "+400%",
-                    simepleAmount = CardInfoStat.SimpleAmount.aHugeAmountOf
+                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 },
                 new CardInfoStat()
                 {
                     positive = true,
                     stat = "Damage",
                     amount = "+200%",
-                    simepleAmount = CardInfoStat.SimpleAmount.aHugeAmountOf
+                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 },
                 new CardInfoStat()
                 {
                     positive = false,
                     stat = "Spread",
                     amount = "+500%",
-                    simepleAmount = CardInfoStat.SimpleAmount.aHugeAmountOf
+                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 },
                 new CardInfoStat()
                 {
                     positive = false,
                     stat = "Reload time",
                     amount = "+0.25s",
-                    simepleAmount = CardInfoStat.SimpleAmount.aLittleBitOf
+                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 }
             };
         }

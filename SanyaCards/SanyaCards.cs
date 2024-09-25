@@ -38,6 +38,7 @@ namespace SanyaCards
             CustomCard.BuildCard<WildCard>();
             CustomCard.BuildCard<NukeCard>();
             CustomCard.BuildCard<Pogo2Card>();
+            CustomCard.BuildCard<ScoutTF2Card>();
         }
     }
 }
