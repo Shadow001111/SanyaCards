@@ -39,6 +39,7 @@ namespace SanyaCards
             CustomCard.BuildCard<NukeCard>();
             CustomCard.BuildCard<Pogo2Card>();
             CustomCard.BuildCard<ScoutTF2Card>();
+            CustomCard.BuildCard<SplitBulletCard>();
         }
     }
 }
