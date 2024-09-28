@@ -1,0 +1,13 @@
+{
+  "name": "SanyaCards",
+  "version_number": "0.0.0",
+  "website_url": "https://github.com/Shadow001111/SanyaCards",
+  "description": "My cards :3",
+  "dependencies": [
+    "BepInEx-BepInExPack_ROUNDS-5.4.1901",
+    "Pykess-ModdingUtils-0.4.8",
+    "Pykess-CardChoiceSpawnUniqueCardPatch-0.1.10",
+    "willuwontu-SimulationChamber-0.0.3",
+    "willuwontu-EvenSpreadPatch-0.0.2"
+  ]
+}

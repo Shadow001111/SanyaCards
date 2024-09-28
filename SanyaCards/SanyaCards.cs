@@ -12,6 +12,8 @@ namespace SanyaCards
     [BepInDependency("com.willis.rounds.unbound", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("pykess.rounds.plugins.moddingutils", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("pykess.rounds.plugins.cardchoicespawnuniquecardpatch", BepInDependency.DependencyFlags.HardDependency)]
+    [BepInDependency("com.willuwontu.rounds.simulationChamber", BepInDependency.DependencyFlags.HardDependency)]
+    [BepInDependency("com.willuwontu.rounds.evenspreadpatch", BepInDependency.DependencyFlags.HardDependency)]
     // Declares our mod to Bepin
     [BepInPlugin(ModId, ModName, Version)]
     // The game our mod is associated with

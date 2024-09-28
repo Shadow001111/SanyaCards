@@ -7,28 +7,34 @@
 
   <ItemGroup>
     <Reference Include="0Harmony">
-      <HintPath>C:\Users\ПК_Сергей\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\SanyaMods\BepInEx\core\0Harmony.dll</HintPath>
+      <HintPath>C:\Users\ПК_Сергей\Downloads\BepInEx_x64_5.4.19.0\BepInEx\core\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\ROUNDS\ROUNDS_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>bin\Debug\netstandard2.1\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx">
-      <HintPath>C:\Users\ПК_Сергей\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\SanyaMods\BepInEx\core\BepInEx.dll</HintPath>
+      <HintPath>C:\Users\ПК_Сергей\Downloads\BepInEx_x64_5.4.19.0\BepInEx\core\BepInEx.dll</HintPath>
     </Reference>
     <Reference Include="CardChoiceSpawnUniqueCardPatch">
-      <HintPath>C:\Users\ПК_Сергей\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\SanyaMods\BepInEx\plugins\Pykess-CardChoiceSpawnUniqueCardPatch\CardChoiceSpawnUniqueCardPatch.dll</HintPath>
+      <HintPath>C:\Users\ПК_Сергей\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\Rounds mods\BepInEx\plugins\Pykess-CardChoiceSpawnUniqueCardPatch\CardChoiceSpawnUniqueCardPatch.dll</HintPath>
     </Reference>
     <Reference Include="ModdingUtils">
-      <HintPath>C:\Users\ПК_Сергей\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\SanyaMods\BepInEx\plugins\Pykess-ModdingUtils\ModdingUtils.dll</HintPath>
+      <HintPath>C:\Users\ПК_Сергей\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\Rounds mods\BepInEx\plugins\Pykess-ModdingUtils\ModdingUtils.dll</HintPath>
+    </Reference>
+    <Reference Include="PhotonUnityNetworking">
+      <HintPath>bin\Debug\netstandard2.1\PhotonUnityNetworking.dll</HintPath>
+    </Reference>
+    <Reference Include="SimulationChamber">
+      <HintPath>C:\Users\ПК_Сергей\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\Rounds mods\BepInEx\plugins\willuwontu-SimulationChamber\SimulationChamber.dll</HintPath>
     </Reference>
     <Reference Include="UnboundLib">
-      <HintPath>C:\Users\ПК_Сергей\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\SanyaMods\BepInEx\plugins\willis81808-UnboundLib\UnboundLib.dll</HintPath>
+      <HintPath>C:\Users\ПК_Сергей\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\Rounds mods\BepInEx\plugins\willis81808-UnboundLib\UnboundLib.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\ROUNDS\ROUNDS_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>bin\Debug\netstandard2.1\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\ROUNDS\ROUNDS_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>bin\Debug\netstandard2.1\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
   </ItemGroup>
 

@@ -7,84 +7,115 @@ using System.Threading.Tasks;
 using UnboundLib;
 using UnboundLib.Cards;
 using UnityEngine;
+using SimulationChamber;
 using Photon.Pun;
+using System.Collections;
 
 
 namespace SanyaCards.Cards
 {
     class SplitBulletMono : MonoBehaviour
     {
-        static public readonly int bulletsAfterSplitCount = 3;
+        static public readonly int bulletsAfterSplitCount = 10;
         static public readonly float splitAngle = 90;
-        static public readonly float splitDelay = 1;
+        static public readonly float splitDelay = 0.5f;
+
+        private float TEMPTIME = Time.time;
 
         private float splitTime;
 
-        GameObject parent;
+        private GameObject parent;
+        public Player player;
+        private Gun gun;
+        private SimulatedGun simulatedGun;
 
-        private void Start()
+        public void Start()
         {
             parent = transform.parent.gameObject;
             splitTime = Time.time + splitDelay;
+
+            this.gun = player.data.weaponHandler.gun;
+            Gun gun = this.gun;
+            simulatedGun = new GameObject("SANYA_simulatedGun").AddComponent<SimulatedGun>();
+            simulatedGun.CopyGunStatsExceptActions(gun);
+            simulatedGun.CopyAttackAction(gun);
+            simulatedGun.CopyShootProjectileAction(gun);
+
+            simulatedGun.numberOfProjectiles = bulletsAfterSplitCount;
+            simulatedGun.bursts = 0;
+            simulatedGun.timeBetweenBullets = 0.0f;
+
+            simulatedGun.spread = 2.0f;
+            simulatedGun.evenSpread = 1.0f;
+            simulatedGun.damage = gun.damage / (float)bulletsAfterSplitCount;
+            simulatedGun.projectileSpeed = 1.0f;
+            simulatedGun.reflects = 0;
+
+            simulatedGun.objectsToSpawn = simulatedGun.objectsToSpawn
+            .Where(go => go != null && go.AddToProjectile.GetComponent<SplitBulletMono>() == null)
+            .ToArray();
         }
 
-        public void Destroy()
+        public void OnDestroy()
         {
-            UnityEngine.Object.Destroy(this);
+            Destroy(simulatedGun);
+            //StartCoroutine(DestroyGun());
         }
 
         private void Update()
         {
             if (Time.time >= splitTime)
             {
+                bool flag2 = !player.data.view.IsMine && !PhotonNetwork.OfflineMode;
                 var parentMoveTransform = parent.GetComponent<MoveTransform>();
                 Vector2 parentVelocity = parentMoveTransform.velocity;
-                float startAngle = -splitAngle * 0.5f;
-                float angleBetweenBullets = splitAngle / (bulletsAfterSplitCount - 1);
-
-                for (int i = 0; i < bulletsAfterSplitCount; i++)
+                if (!flag2)
                 {
-                    // Calculate the angle for each new bullet
-                    float currentAngle = startAngle + i * angleBetweenBullets;
-
-                    // Instantiate the new bullet
-                    GameObject newBullet = Instantiate(parent, parent.transform.position, parent.transform.rotation);
-
-                    // Set the velocity of the new bullet
-                    // newBullet.GetComponent<MoveTransform>().velocity = Quaternion.Euler(0, 0, currentAngle) * parentVelocity;
-                    Vector2 rdDpos = UnityEngine.Random.insideUnitCircle;
-                    newBullet.transform.position = parent.transform.position + new Vector3(rdDpos.x, 0, rdDpos.y);
+                    simulatedGun.SimulatedAttack(player.playerID, parent.transform.position, parentVelocity.normalized, 1.0f, 1.0f);
                 }
-
                 UnityEngine.Object.Destroy(parent);
             }
+        }
+
+        private IEnumerator DestroyGun()
+        {
+            yield return new WaitForSeconds(simulatedGun.timeBetweenBullets * simulatedGun.bursts);
+            Destroy(simulatedGun);
         }
     }
 
     class SplitBulletCard : CustomCard
     {
+        private static GameObject splitBulletObject;
+
         public override void SetupCard(CardInfo cardInfo, Gun gun, ApplyCardStats cardStats, CharacterStatModifiers statModifiers, Block block)
         {
             //Edits values on card itself, which are then applied to the player in `ApplyCardStats`
             UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been setup.");
 
             cardInfo.allowMultiple = false;
-
-            var obj = new GameObject("splitBullet");
-            obj.AddComponent<SplitBulletMono>();
-
-            gun.objectsToSpawn = new[]
-            {
-                new ObjectsToSpawn
-                {
-                    AddToProjectile = obj
-                }
-            };
         }
         public override void OnAddCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
             //Edits values on player when card is selected
             UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been added to player {player.playerID}.");
+
+            if (splitBulletObject == null)
+            {
+                splitBulletObject = new GameObject("SANYA_splitBullet");
+                var objMono = splitBulletObject.AddComponent<SplitBulletMono>();
+                objMono.player = player;
+
+                var objectsToSpawnList = gun.objectsToSpawn.ToList();
+                objectsToSpawnList.Add
+                (
+                    new ObjectsToSpawn
+                    {
+                        AddToProjectile = splitBulletObject
+                    }
+                );
+                gun.objectsToSpawn = objectsToSpawnList.ToArray();
+            }
         }
         public override void OnRemoveCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
