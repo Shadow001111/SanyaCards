@@ -22,19 +22,25 @@ namespace SanyaCards.Cards
             gun.damage = 3.0f;
             gun.drag = 0.5f;
             gun.attackSpeed = 4.0f;
-            gun.reloadTime = 2.0f;
+            gun.reloadTimeAdd = 2.0f;
 
             gun.explodeNearEnemyRange = 100.0f;
             gun.explodeNearEnemyDamage = 50.0f;
 
-            var explosiveBullet = (GameObject)Resources.Load("0 cards/Explosive bullet");
-            var a_Explosion = explosiveBullet.GetComponent<Gun>().objectsToSpawn[0].effect;
-            var explo = Instantiate(a_Explosion);
-            explo.transform.position = new Vector3(1000, 0, 0);
-            explo.hideFlags = HideFlags.HideAndDontSave;
-            explo.name = "customExplo";
-            DestroyImmediate(explo.GetComponent<RemoveAfterSeconds>());
-            var explosion = explo.GetComponent<Explosion>();
+            var objectsToSpawn = ((GameObject)Resources.Load("0 cards/Explosive bullet")).GetComponent<Gun>().objectsToSpawn[0];
+
+            var addToProjectile = Instantiate(objectsToSpawn.AddToProjectile);
+            addToProjectile.hideFlags = HideFlags.HideAndDontSave;
+            addToProjectile.transform.position = new Vector3(1000, 0, 0);
+            addToProjectile.name = "A_SANYA_NukeBullet";
+
+            var effect = Instantiate(objectsToSpawn.effect);
+            effect.hideFlags = HideFlags.HideAndDontSave;
+            effect.transform.position = new Vector3(1000, 0, 0);
+            effect.name = "A_SANYA_NukeExplosion";
+
+            Destroy(effect.GetComponent<RemoveAfterSeconds>());
+            var explosion = effect.GetComponent<Explosion>();
             explosion.force = 10000;
             explosion.range = 3;
 
@@ -42,16 +48,13 @@ namespace SanyaCards.Cards
             {
                 new ObjectsToSpawn
                 {
-                    effect = explo,
+                    AddToProjectile = addToProjectile,
+                    effect = effect,
                     normalOffset = 0.1f,
                     numberOfSpawns = 1,
                     scaleFromDamage = 1.0f,
                     scaleStackM = 0.7f,
                     scaleStacks = true,
-                },
-                new ObjectsToSpawn
-                {
-                    scaleFromDamage = 0f
                 }
             };
         }

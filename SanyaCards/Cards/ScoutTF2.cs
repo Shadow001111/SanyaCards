@@ -25,7 +25,7 @@ namespace SanyaCards.Cards
             gun.destroyBulletAfter = 0.2f;
             gun.ammo = 4;
 
-            gun.reloadTime = 0.5f;
+            gun.reloadTimeAdd = 0.5f;
         }
         public override void OnAddCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {

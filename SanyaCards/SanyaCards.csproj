@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Cards\Pogo2.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>C:\Users\ПК_Сергей\Downloads\BepInEx_x64_5.4.19.0\BepInEx\core\0Harmony.dll</HintPath>
     </Reference>
@@ -25,7 +29,7 @@
       <HintPath>bin\Debug\netstandard2.1\PhotonUnityNetworking.dll</HintPath>
     </Reference>
     <Reference Include="SimulationChamber">
-      <HintPath>C:\Users\ПК_Сергей\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\Rounds mods\BepInEx\plugins\willuwontu-SimulationChamber\SimulationChamber.dll</HintPath>
+      <HintPath>C:\Users\ПК_Сергей\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\SanyaMods\BepInEx\plugins\willuwontu-SimulationChamber\SimulationChamber.dll</HintPath>
     </Reference>
     <Reference Include="UnboundLib">
       <HintPath>C:\Users\ПК_Сергей\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\Rounds mods\BepInEx\plugins\willis81808-UnboundLib\UnboundLib.dll</HintPath>
