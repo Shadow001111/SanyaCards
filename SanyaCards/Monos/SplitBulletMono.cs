@@ -7,20 +7,21 @@ using UnityEngine;
 class SplitBulletMono : MonoBehaviour
 {
     static public readonly int bulletsAfterSplitCount = 10;
-    static public readonly float splitAngle = 90;
     static public readonly float splitDelay = 0.5f;
 
     private float splitTime;
 
     private GameObject? parent = null;
     public Player player;
-    private Gun gun;
-    private SimulatedGun simulatedGun;
+    private Gun? gun;
+    private SimulatedGun? simulatedGun;
+    private List<GameObject>? newInstacesOfAddToProjectile;
 
     public void Start()
     {
         if (transform.parent == null)
         {
+            UnityEngine.Debug.Log("Parent is null");
             return;
         }
         parent = transform.parent.gameObject;
@@ -28,7 +29,7 @@ class SplitBulletMono : MonoBehaviour
 
         this.gun = player.data.weaponHandler.gun;
         Gun gun = this.gun;
-        simulatedGun = new GameObject("SANYA_simulatedGun").AddComponent<SimulatedGun>();
+        simulatedGun = parent.AddComponent<SimulatedGun>();
 
         simulatedGun.CopyGunStatsExceptActions(gun);
         simulatedGun.CopyAttackAction(gun);
@@ -38,40 +39,46 @@ class SplitBulletMono : MonoBehaviour
         simulatedGun.bursts = 1;
         simulatedGun.timeBetweenBullets = 0.0f;
 
+        ProjectileHit projectileHitComponent = parent.GetComponent<ProjectileHit>();
+
         simulatedGun.spread = 1.0f;
         simulatedGun.evenSpread = 1.0f;
-        simulatedGun.damage = gun.damage / bulletsAfterSplitCount * 2.0f;
+        simulatedGun.damage = projectileHitComponent.damage / 55.0f / bulletsAfterSplitCount * 2.0f;
+        simulatedGun.bulletDamageMultiplier = projectileHitComponent.dealDamageMultiplierr;
         simulatedGun.damageAfterDistanceMultiplier = 1.0f;
         simulatedGun.projectileSpeed = 0.5f;
+        simulatedGun.projectielSimulatonSpeed = 1.0f;
         simulatedGun.reflects = 0;
         simulatedGun.destroyBulletAfter = 20.0f;
         simulatedGun.gravity = 1.0f;
 
         var newObjectsToSpawn = new List<ObjectsToSpawn>();
+        newInstacesOfAddToProjectile = new List<GameObject>();
         foreach (var oldObjectsToSpawn in gun.objectsToSpawn)
         {
-            var oldAddToProjectile = oldObjectsToSpawn.AddToProjectile;
-            if (oldAddToProjectile != null && oldAddToProjectile.name == "A_ScreenEdge")
+            GameObject? addToProjectile = oldObjectsToSpawn.AddToProjectile;
+            bool addToProjectileChanged = false;
+            if (addToProjectile != null)
             {
-                continue;
-            }
-
-            GameObject? newAddToProjectile = oldAddToProjectile;
-            if (oldAddToProjectile != null)
-            {
-                if (oldAddToProjectile.GetComponent<SplitBulletMono>() != null)
+                if (addToProjectile.GetComponent<SplitBulletMono>() != null)
                 {
-                    newAddToProjectile = Instantiate(oldAddToProjectile);
+                    addToProjectile = Instantiate(addToProjectile);
+                    newInstacesOfAddToProjectile.Add(addToProjectile);
+                    addToProjectileChanged = true;
 
-                    SplitBulletMono splitBulletComp = newAddToProjectile.GetComponent<SplitBulletMono>();
-                    Destroy(splitBulletComp);
-                    newAddToProjectile.AddComponent<NoSelfCollide>();
+                    Destroy(addToProjectile.GetComponent<SplitBulletMono>());
+                    addToProjectile.AddComponent<NoSelfCollide>();
                 }
-                else
+                if (addToProjectile.GetComponent<ScreenEdgeBounce>() != null)
                 {
-                    newAddToProjectile = oldAddToProjectile;
+                    if (!addToProjectileChanged)
+                    {
+                        addToProjectile = Instantiate(addToProjectile);
+                        newInstacesOfAddToProjectile.Add(addToProjectile);
+                        addToProjectileChanged = true;
+                    }
+                    Destroy(addToProjectile.GetComponent<ScreenEdgeBounce>());
                 }
-
             }
 
             newObjectsToSpawn.Add(new ObjectsToSpawn
@@ -85,7 +92,7 @@ class SplitBulletMono : MonoBehaviour
                 stickToBigTargets = oldObjectsToSpawn.stickToBigTargets,
                 stickToAllTargets = oldObjectsToSpawn.stickToAllTargets,
                 zeroZ = oldObjectsToSpawn.zeroZ,
-                AddToProjectile = newAddToProjectile
+                AddToProjectile = addToProjectile
             });
         }
         simulatedGun.objectsToSpawn = newObjectsToSpawn.ToArray();
@@ -93,9 +100,15 @@ class SplitBulletMono : MonoBehaviour
 
     public void OnDestroy()
     {
-        if (simulatedGun != null)
+        if (parent != null)
         {
-            Destroy(simulatedGun.gameObject);
+            UnityEngine.Debug.Log("Cleanup: " + newInstacesOfAddToProjectile.Count);
+            foreach (GameObject addOnProjectile in newInstacesOfAddToProjectile)
+            {
+                Destroy(addOnProjectile);
+            }
+            newInstacesOfAddToProjectile.Clear();
+
         }
     }
 

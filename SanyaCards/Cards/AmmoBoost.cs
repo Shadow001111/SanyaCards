@@ -10,29 +10,19 @@ using UnityEngine;
 
 namespace SanyaCards.Cards
 {
-    class PrecisionStrikeCard : CustomCard
+    class AmmoBoostCard : CustomCard
     {
         public override void SetupCard(CardInfo cardInfo, Gun gun, ApplyCardStats cardStats, CharacterStatModifiers statModifiers, Block block)
         {
             //Edits values on card itself, which are then applied to the player in `ApplyCardStats`
             UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been setup.");
 
-            gun.reloadTimeAdd = 0.25f;
+            gun.ammo = 3;
         }
         public override void OnAddCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
             //Edits values on player when card is selected
             UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been added to player {player.playerID}.");
-
-            gun.damage *= 2.5f;
-            if (gun.spread > 0.0f)
-            {
-                gun.spread = Mathf.Max(0.0f, gun.spread - 0.1f);
-            }
-            gun.attackSpeed *= 2.0f;
-            gunAmmo.maxAmmo /= 2;
-
-            gun.dontAllowAutoFire = true;
         }
         public override void OnRemoveCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
@@ -42,11 +32,11 @@ namespace SanyaCards.Cards
         }
         protected override string GetTitle()
         {
-            return "Precision strike";
+            return "Ammo boost";
         }
         protected override string GetDescription()
         {
-            return "Skill matters(and ping)!";
+            return "+3 ammo. Just enough to miss a few extra shots";
         }
         protected override GameObject GetCardArt()
         {
@@ -54,7 +44,7 @@ namespace SanyaCards.Cards
         }
         protected override CardInfo.Rarity GetRarity()
         {
-            return CardInfo.Rarity.Uncommon;
+            return CardInfo.Rarity.Common;
         }
         protected override CardInfoStat[] GetStats()
         {
@@ -63,43 +53,8 @@ namespace SanyaCards.Cards
                 new CardInfoStat()
                 {
                     positive = true,
-                    stat = "Damage",
-                    amount = "+150%",
-                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
-                },
-                new CardInfoStat()
-                {
-                    positive = true,
-                    stat = "Spread",
-                    amount = "-10%",
-                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
-                },
-                new CardInfoStat()
-                {
-                    positive = false,
-                    stat = "Attack speed",
-                    amount = "-50%",
-                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
-                },
-                new CardInfoStat()
-                {
-                    positive = false,
                     stat = "Ammo",
-                    amount = "halved",
-                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
-                },
-                new CardInfoStat()
-                {
-                    positive = false,
-                    stat = "Reload time",
-                    amount = "+0.25s",
-                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
-                },
-                new CardInfoStat()
-                {
-                    positive = false,
-                    stat = "AutoFire",
-                    amount = "Disabled",
+                    amount = "+3",
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 }
             };

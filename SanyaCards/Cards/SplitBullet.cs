@@ -17,8 +17,7 @@ namespace SanyaCards.Cards
 {
     class SplitBulletCard : CustomCard
     {
-        // TODO: try to remove static to see if it will ifx multiplayer
-        private static GameObject splitBulletObject;
+        private GameObject splitBulletObject;
 
         public override void SetupCard(CardInfo cardInfo, Gun gun, ApplyCardStats cardStats, CharacterStatModifiers statModifiers, Block block)
         {
@@ -34,22 +33,19 @@ namespace SanyaCards.Cards
             //Edits values on player when card is selected
             UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been added to player {player.playerID}.");
 
-            if (splitBulletObject == null)
-            {
-                splitBulletObject = new GameObject("A_SANYA_splitBullet");
-                var objMono = splitBulletObject.AddComponent<SplitBulletMono>();
-                objMono.player = player;
+            splitBulletObject = new GameObject("A_SANYA_splitBullet");
+            var objMono = splitBulletObject.AddComponent<SplitBulletMono>();
+            objMono.player = player;
 
-                var objectsToSpawnList = gun.objectsToSpawn.ToList();
-                objectsToSpawnList.Add
-                (
-                    new ObjectsToSpawn
-                    {
-                        AddToProjectile = splitBulletObject
-                    }
-                );
-                gun.objectsToSpawn = objectsToSpawnList.ToArray();
-            }
+            var objectsToSpawnList = gun.objectsToSpawn.ToList();
+            objectsToSpawnList.Add
+            (
+                new ObjectsToSpawn
+                {
+                    AddToProjectile = splitBulletObject
+                }
+            );
+            gun.objectsToSpawn = objectsToSpawnList.ToArray();
         }
         public override void OnRemoveCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
@@ -58,11 +54,11 @@ namespace SanyaCards.Cards
         }
         protected override string GetTitle()
         {
-            return "Split Bullet";
+            return "Split bullet";
         }
         protected override string GetDescription()
         {
-            return "Splits bullet into ten smaller ones after 0.5s delay\n Does not work with Dazzle and ToxicClouds :C";
+            return "Splits bullet into ten smaller ones after 0.5s delay";
         }
         protected override GameObject GetCardArt()
         {
@@ -80,7 +76,7 @@ namespace SanyaCards.Cards
                 {
                     positive = false,
                     stat = "Splitted bullet damage",
-                    amount = "20%",
+                    amount = "20% from original",
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 },
                 new CardInfoStat()
