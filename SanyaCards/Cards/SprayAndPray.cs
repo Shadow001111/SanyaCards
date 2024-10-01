@@ -1,5 +1,4 @@
-﻿using ModdingUtils.RoundsEffects;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,62 +6,44 @@ using System.Threading.Tasks;
 using UnboundLib;
 using UnboundLib.Cards;
 using UnityEngine;
-using SimulationChamber;
-using Photon.Pun;
-using System.Collections;
-using SanyaCards.Monos;
 
 
 namespace SanyaCards.Cards
 {
-    class SplitBulletCard : CustomCard
+    class SprayAndPrayCard : CustomCard
     {
-        // TODO: try to remove static to see if it will ifx multiplayer
-        private static GameObject splitBulletObject;
-
         public override void SetupCard(CardInfo cardInfo, Gun gun, ApplyCardStats cardStats, CharacterStatModifiers statModifiers, Block block)
         {
             //Edits values on card itself, which are then applied to the player in `ApplyCardStats`
             UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been setup.");
 
-            cardInfo.allowMultiple = false;
             gun.reloadTimeAdd = 0.25f;
-            gun.damage = 0.75f;
         }
         public override void OnAddCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
             //Edits values on player when card is selected
             UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been added to player {player.playerID}.");
 
-            if (splitBulletObject == null)
-            {
-                splitBulletObject = new GameObject("A_SANYA_splitBullet");
-                var objMono = splitBulletObject.AddComponent<SplitBulletMono>();
-                objMono.player = player;
+            gun.damage *= 0.5f;
+            gun.spread += 0.1f;
+            gun.attackSpeed /= 2.5f;
+            gunAmmo.maxAmmo *= 2;
 
-                var objectsToSpawnList = gun.objectsToSpawn.ToList();
-                objectsToSpawnList.Add
-                (
-                    new ObjectsToSpawn
-                    {
-                        AddToProjectile = splitBulletObject
-                    }
-                );
-                gun.objectsToSpawn = objectsToSpawnList.ToArray();
-            }
+            gun.dontAllowAutoFire = false;
         }
         public override void OnRemoveCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
             //Run when the card is removed from the player
             UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been removed from player {player.playerID}.");
+
         }
         protected override string GetTitle()
         {
-            return "Split Bullet";
+            return "Spray and pray";
         }
         protected override string GetDescription()
         {
-            return "Splits bullet into ten smaller ones after 0.5s delay\n Does not work with Dazzle and ToxicClouds :C";
+            return "Flood the battlefield with bullets!";
         }
         protected override GameObject GetCardArt()
         {
@@ -78,9 +59,30 @@ namespace SanyaCards.Cards
             {
                 new CardInfoStat()
                 {
+                    positive = true,
+                    stat = "Attack speed",
+                    amount = "+150%",
+                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
+                },
+                new CardInfoStat()
+                {
+                    positive = true,
+                    stat = "Ammo",
+                    amount = "doubled",
+                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
+                },
+                new CardInfoStat()
+                {
                     positive = false,
-                    stat = "Splitted bullet damage",
-                    amount = "20%",
+                    stat = "Damage",
+                    amount = "-50%",
+                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
+                },
+                new CardInfoStat()
+                {
+                    positive = false,
+                    stat = "Spread",
+                    amount = "+10%",
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 },
                 new CardInfoStat()
@@ -92,16 +94,16 @@ namespace SanyaCards.Cards
                 },
                 new CardInfoStat()
                 {
-                    positive = false,
-                    stat = "Damage",
-                    amount = "-25%",
+                    positive = true,
+                    stat = "AutoFire",
+                    amount = "Enabled",
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 }
             };
         }
         protected override CardThemeColor.CardThemeColorType GetTheme()
         {
-            return CardThemeColor.CardThemeColorType.TechWhite;
+            return CardThemeColor.CardThemeColorType.FirepowerYellow;
         }
         public override string GetModName()
         {

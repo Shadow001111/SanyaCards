@@ -19,7 +19,7 @@ namespace SanyaCards.Cards
 
             statModifiers.movementSpeed = 1.5f;
             gun.numberOfProjectiles = 9;
-            gun.bulletDamageMultiplier = 0.5f;
+            gun.damage = 0.5f;
             gun.spread = 0.3f;
             gun.evenSpread = 1.0f;
             gun.destroyBulletAfter = 0.2f;
@@ -54,7 +54,7 @@ namespace SanyaCards.Cards
         }
         protected override CardInfo.Rarity GetRarity()
         {
-            return CardInfo.Rarity.Common;
+            return CardInfo.Rarity.Uncommon;
         }
         protected override CardInfoStat[] GetStats()
         {
@@ -101,12 +101,19 @@ namespace SanyaCards.Cards
                     stat = "Reload time",
                     amount = "+0.5s",
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned
+                },
+                new CardInfoStat()
+                {
+                    positive = false,
+                    stat = "health",
+                    amount = "-20%",
+                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 }
             };
         }
         protected override CardThemeColor.CardThemeColorType GetTheme()
         {
-            return CardThemeColor.CardThemeColorType.DestructiveRed;
+            return CardThemeColor.CardThemeColorType.FirepowerYellow;
         }
         public override string GetModName()
         {

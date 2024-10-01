@@ -19,13 +19,22 @@ namespace SanyaCards.Cards
 
             cardInfo.allowMultiple = false;
 
-            gun.damage = 3.0f;
+            gun.damage = 4.0f;
             gun.drag = 0.5f;
-            gun.attackSpeed = 4.0f;
+            gun.attackSpeed = 5.0f;
             gun.reloadTimeAdd = 2.0f;
 
             gun.explodeNearEnemyRange = 100.0f;
             gun.explodeNearEnemyDamage = 50.0f;
+        }
+        public override void OnAddCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
+        {
+            //Edits values on player when card is selected
+            UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been added to player {player.playerID}.");
+
+            gun.projectileSpeed *= 0.75f;
+            gun.gravity *= 0.5f;
+            gunAmmo.maxAmmo = 1;
 
             var objectsToSpawn = ((GameObject)Resources.Load("0 cards/Explosive bullet")).GetComponent<Gun>().objectsToSpawn[0];
 
@@ -58,15 +67,6 @@ namespace SanyaCards.Cards
                 }
             };
         }
-        public override void OnAddCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
-        {
-            //Edits values on player when card is selected
-            UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been added to player {player.playerID}.");
-
-            gun.projectileSpeed *= 0.75f;
-            gun.gravity *= 0.5f;
-            gunAmmo.maxAmmo = 1;
-        }
         public override void OnRemoveCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
             //Run when the card is removed from the player
@@ -87,7 +87,7 @@ namespace SanyaCards.Cards
         }
         protected override CardInfo.Rarity GetRarity()
         {
-            return CardInfo.Rarity.Common;
+            return CardInfo.Rarity.Uncommon;
         }
         protected override CardInfoStat[] GetStats()
         {
@@ -111,14 +111,14 @@ namespace SanyaCards.Cards
                 {
                     positive = false,
                     stat = "Bullet speed",
-                    amount = "75%",
+                    amount = "-25%",
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 },
                 new CardInfoStat()
                 {
                     positive = false,
                     stat = "Gravity",
-                    amount = "50%",
+                    amount = "-50%",
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 },
                 new CardInfoStat()
@@ -146,7 +146,7 @@ namespace SanyaCards.Cards
         }
         protected override CardThemeColor.CardThemeColorType GetTheme()
         {
-            return CardThemeColor.CardThemeColorType.PoisonGreen;
+            return CardThemeColor.CardThemeColorType.DestructiveRed;
         }
         public override string GetModName()
         {

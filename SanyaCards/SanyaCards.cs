@@ -12,6 +12,7 @@ namespace SanyaCards
     [BepInDependency("com.willis.rounds.unbound", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("pykess.rounds.plugins.moddingutils", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("pykess.rounds.plugins.cardchoicespawnuniquecardpatch", BepInDependency.DependencyFlags.HardDependency)]
+    [BepInDependency("pykess.rounds.plugins.playerjumppatch", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("com.willuwontu.rounds.simulationChamber", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("com.willuwontu.rounds.evenspreadpatch", BepInDependency.DependencyFlags.SoftDependency)]
     // Declares our mod to Bepin
@@ -22,7 +23,7 @@ namespace SanyaCards
     {
         private const string ModId = "com.Shadow.SanyaCards";
         private const string ModName = "SanyaCards";
-        public const string Version = "0.1.1"; // What version are we on (major.minor.patch)?
+        public const string Version = "0.2.0"; // What version are we on (major.minor.patch)?
         public const string ModInitials = "SANYA";
 
         public static SanyaCards instance { get; private set; }
@@ -40,6 +41,8 @@ namespace SanyaCards
             CustomCard.BuildCard<NukeCard>();
             CustomCard.BuildCard<ScoutTF2Card>();
             CustomCard.BuildCard<SplitBulletCard>();
+            CustomCard.BuildCard<PrecisionStrikeCard>();
+            CustomCard.BuildCard<SprayAndPrayCard>();
         }
     }
 }

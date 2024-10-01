@@ -28,6 +28,9 @@
     <Reference Include="PhotonUnityNetworking">
       <HintPath>bin\Debug\netstandard2.1\PhotonUnityNetworking.dll</HintPath>
     </Reference>
+    <Reference Include="PlayerJumpPatch">
+      <HintPath>C:\Users\ПК_Сергей\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\Rounds mods\BepInEx\plugins\Pykess-PlayerJumpPatch\PlayerJumpPatch.dll</HintPath>
+    </Reference>
     <Reference Include="SimulationChamber">
       <HintPath>C:\Users\ПК_Сергей\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\SanyaMods\BepInEx\plugins\willuwontu-SimulationChamber\SimulationChamber.dll</HintPath>
     </Reference>
