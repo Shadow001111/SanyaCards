@@ -58,7 +58,7 @@ namespace SanyaCards.Cards
         }
         protected override string GetDescription()
         {
-            return "Splits bullet into ten smaller ones after 0.5s delay";
+            return "Splits bullet into ten smaller ones after 0.5s delay\nNot in sync in mutiplayer :C";
         }
         protected override GameObject GetCardArt()
         {

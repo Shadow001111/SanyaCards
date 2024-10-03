@@ -3,6 +3,7 @@ using SanyaCards.Monos;
 using SimulationChamber;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Reflection;
 
 class SplitBulletMono : MonoBehaviour
 {
@@ -13,24 +14,21 @@ class SplitBulletMono : MonoBehaviour
 
     private GameObject? parent = null;
     public Player player;
-    private Gun? gun;
-    private SimulatedGun? simulatedGun;
-    private List<GameObject>? newInstacesOfAddToProjectile;
+    private List<GameObject>? newInstacesOfAddToProjectile = null;
+    private SimulatedGun simulatedGun;
 
-    public void Start()
+    private void BuildSimulatedGun()
     {
-        if (transform.parent == null)
+        simulatedGun = new GameObject("A_SANYA_SimulatedGun").AddComponent<SimulatedGun>();
+        System.Type type = typeof(SimulatedGun);
+        FieldInfo fieldInfo = type.GetField("simulationID", BindingFlags.NonPublic | BindingFlags.Instance);
+        if (fieldInfo != null)
         {
-            UnityEngine.Debug.Log("Parent is null");
-            return;
+            int ID = (int)fieldInfo.GetValue(simulatedGun);
+            UnityEngine.Debug.Log("SimID: " + ID);
         }
-        parent = transform.parent.gameObject;
-        splitTime = Time.time + splitDelay;
 
-        this.gun = player.data.weaponHandler.gun;
-        Gun gun = this.gun;
-        simulatedGun = parent.AddComponent<SimulatedGun>();
-
+        Gun gun = player.data.weaponHandler.gun;
         simulatedGun.CopyGunStatsExceptActions(gun);
         simulatedGun.CopyAttackAction(gun);
         simulatedGun.CopyShootProjectileAction(gun);
@@ -51,6 +49,14 @@ class SplitBulletMono : MonoBehaviour
         simulatedGun.reflects = 0;
         simulatedGun.destroyBulletAfter = 20.0f;
         simulatedGun.gravity = 1.0f;
+        simulatedGun.drag = 0.0f;
+
+        simulatedGun.chargeDamageMultiplier = 1.0f;
+        simulatedGun.chargeEvenSpreadTo = 0.0f;
+        simulatedGun.chargeNumberOfProjectilesTo = 0;
+        simulatedGun.chargeRecoilTo = 0.0f;
+        simulatedGun.chargeSpeedTo = 0.0f;
+        simulatedGun.chargeSpreadTo = 0.0f;
 
         var newObjectsToSpawn = new List<ObjectsToSpawn>();
         newInstacesOfAddToProjectile = new List<GameObject>();
@@ -98,17 +104,25 @@ class SplitBulletMono : MonoBehaviour
         simulatedGun.objectsToSpawn = newObjectsToSpawn.ToArray();
     }
 
+    public void Start()
+    {
+        if (transform.parent == null)
+        {
+            return;
+        }
+        parent = transform.parent.gameObject;
+        splitTime = Time.time + splitDelay;
+    }
+
     public void OnDestroy()
     {
-        if (parent != null)
+        if (newInstacesOfAddToProjectile != null)
         {
-            UnityEngine.Debug.Log("Cleanup: " + newInstacesOfAddToProjectile.Count);
             foreach (GameObject addOnProjectile in newInstacesOfAddToProjectile)
             {
                 Destroy(addOnProjectile);
             }
             newInstacesOfAddToProjectile.Clear();
-
         }
     }
 
@@ -120,6 +134,7 @@ class SplitBulletMono : MonoBehaviour
         }
         else if (Time.time >= splitTime)
         {
+            BuildSimulatedGun();
             if (player.data.view.IsMine || PhotonNetwork.OfflineMode)
             {
                 var parentMoveTransform = parent.GetComponent<MoveTransform>();
@@ -128,8 +143,9 @@ class SplitBulletMono : MonoBehaviour
                 {
                     shootDirection = Vector2.right;
                 }
-                simulatedGun.SimulatedAttack(player.playerID, parent.transform.position, shootDirection, 1.0f, 1.0f);
-                simulatedGun.SimulatedAttack(player.playerID, parent.transform.position, -shootDirection, 1.0f, 1.0f);
+
+                simulatedGun.SimulatedAttack(player.playerID, parent.transform.position, shootDirection, 1.0f, 1.0f, null, false);
+                simulatedGun.SimulatedAttack(player.playerID, parent.transform.position, -shootDirection, 1.0f, 1.0f, null, false);
             }
             Destroy(parent);
         }
