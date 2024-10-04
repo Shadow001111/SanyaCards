@@ -18,7 +18,8 @@ namespace SanyaCards.Patches
         [HarmonyPrefix]
         public static bool hitSurface(ProjectileCollision __instance, ref ProjectileHitSurface.HasToStop __result, GameObject projectile, HitInfo hit)
         {
-            if (projectile.GetComponent<ProjectileHit>().ownPlayer == __instance.GetComponentInParent<ProjectileHit>().ownPlayer && projectile.GetComponentInChildren<NoSelfCollide>())
+            if (projectile.GetComponent<ProjectileHit>().ownPlayer == __instance.GetComponentInParent<ProjectileHit>().ownPlayer
+                && (projectile.GetComponentInChildren<NoSelfCollide>() || __instance.GetComponentInChildren<NoSelfCollide>()))
             {
                 return false;
             }

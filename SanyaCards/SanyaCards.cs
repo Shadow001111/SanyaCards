@@ -44,6 +44,8 @@ namespace SanyaCards
             CustomCard.BuildCard<PrecisionStrikeCard>();
             CustomCard.BuildCard<SprayAndPrayCard>();
             CustomCard.BuildCard<AmmoBoostCard>();
+            CustomCard.BuildCard<BouncesToDamageCard>();
+            CustomCard.BuildCard<SandwichCard>();
         }
     }
 }

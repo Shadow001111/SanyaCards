@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <Compile Remove="Cards\Pogo2.cs" />
+    <Compile Remove="Monos\SplitBulletGun.cs" />
   </ItemGroup>
 
   <ItemGroup>
