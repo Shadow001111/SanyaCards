@@ -86,7 +86,7 @@ namespace SanyaCards.Cards
                 {
                     positive = false,
                     stat = "Block cooldown",
-                    amount = "0.25s",
+                    amount = "+0.25s",
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 }
             };

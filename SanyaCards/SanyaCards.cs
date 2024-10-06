@@ -15,6 +15,7 @@ namespace SanyaCards
     [BepInDependency("pykess.rounds.plugins.playerjumppatch", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("com.willuwontu.rounds.simulationChamber", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("com.willuwontu.rounds.evenspreadpatch", BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency("root.patch.regeneration", BepInDependency.DependencyFlags.SoftDependency)]
     // Declares our mod to Bepin
     [BepInPlugin(ModId, ModName, Version)]
     // The game our mod is associated with
@@ -23,7 +24,7 @@ namespace SanyaCards
     {
         private const string ModId = "com.Shadow.SanyaCards";
         private const string ModName = "SanyaCards";
-        public const string Version = "0.3.0"; // What version are we on (major.minor.patch)?
+        public const string Version = "0.3.0";
         public const string ModInitials = "SANYA";
 
         public static SanyaCards instance { get; private set; }
@@ -46,6 +47,8 @@ namespace SanyaCards
             CustomCard.BuildCard<AmmoBoostCard>();
             CustomCard.BuildCard<BouncesToDamageCard>();
             CustomCard.BuildCard<SandwichCard>();
+            CustomCard.BuildCard<BloodySpeedCard>();
+            CustomCard.BuildCard<StompCard>();
         }
     }
 }

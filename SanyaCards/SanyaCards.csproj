@@ -23,6 +23,9 @@
     <Reference Include="CardChoiceSpawnUniqueCardPatch">
       <HintPath>C:\Users\ПК_Сергей\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\Rounds mods\BepInEx\plugins\Pykess-CardChoiceSpawnUniqueCardPatch\CardChoiceSpawnUniqueCardPatch.dll</HintPath>
     </Reference>
+    <Reference Include="InControl">
+      <HintPath>bin\Release\netstandard2.1\InControl.dll</HintPath>
+    </Reference>
     <Reference Include="ModdingUtils">
       <HintPath>C:\Users\ПК_Сергей\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\Rounds mods\BepInEx\plugins\Pykess-ModdingUtils\ModdingUtils.dll</HintPath>
     </Reference>
@@ -43,6 +46,9 @@
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>bin\Debug\netstandard2.1\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Physics2DModule">
+      <HintPath>bin\Release\netstandard2.1\UnityEngine.Physics2DModule.dll</HintPath>
     </Reference>
   </ItemGroup>
 
