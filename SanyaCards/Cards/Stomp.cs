@@ -39,7 +39,7 @@ namespace SanyaCards.Cards
         }
         protected override string GetDescription()
         {
-            return "Stomps on block";
+            return "Stomps on block. Damage depends on height.";
         }
         protected override GameObject GetCardArt()
         {
