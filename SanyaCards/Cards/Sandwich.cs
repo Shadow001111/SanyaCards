@@ -27,7 +27,10 @@ namespace SanyaCards.Cards
             //Edits values on player when card is selected
             UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been added to player {player.playerID}.");
 
-            player.gameObject.AddComponent<SandwichPlayerHeal>();
+            var child = new GameObject("Sandwich");
+            child.transform.SetParent(player.transform);
+            child.AddComponent<SandwichMono>();
+            characterStats.objectsAddedToPlayer.Add(child);
         }
         public override void OnRemoveCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
@@ -48,7 +51,7 @@ namespace SanyaCards.Cards
         }
         protected override CardInfo.Rarity GetRarity()
         {
-            return CardInfo.Rarity.Uncommon;
+            return CardInfo.Rarity.Rare;
         }
         protected override CardInfoStat[] GetStats()
         {
@@ -65,21 +68,21 @@ namespace SanyaCards.Cards
                 {
                     positive = false,
                     stat = "Ability cooldown",
-                    amount = SandwichPlayerHeal.abilityCooldown + "s",
+                    amount = SandwichMono.abilityCooldown + "s",
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 },
                 new CardInfoStat()
                 {
                     positive = false,
                     stat = "Eating time",
-                    amount = SandwichPlayerHeal.abilityDuration + "s",
+                    amount = SandwichMono.abilityDuration + "s",
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 },
                 new CardInfoStat()
                 {
                     positive = false,
                     stat = "Movement speed when eating",
-                    amount = (100.0f / SandwichPlayerHeal.abilityCooldown) + "%",
+                    amount = (100.0f / SandwichMono.abilityCooldown) + "%",
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 },
                 new CardInfoStat()

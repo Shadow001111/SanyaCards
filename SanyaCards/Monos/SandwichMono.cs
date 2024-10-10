@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace SanyaCards.Monos
 {
-    class SandwichPlayerHeal : MonoBehaviour
+    class SandwichMono : MonoBehaviour
     {
         public static readonly float abilityCooldown = 10.0f;
         public static readonly float abilityDuration = 2.0f;
@@ -25,11 +25,11 @@ namespace SanyaCards.Monos
         {
             abilityUseTime = Time.time;
 
-            player = GetComponent<Player>();
+            player = GetComponentInParent<Player>();
             player.data.block.BlockAction += this.OnBlock;
 
-            stats = GetComponent<CharacterStatModifiers>();
-            healthHandler = GetComponent<HealthHandler>();
+            stats = player.GetComponent<CharacterStatModifiers>();
+            healthHandler = player.GetComponent<HealthHandler>();
         }
 
         private void OnDisable()

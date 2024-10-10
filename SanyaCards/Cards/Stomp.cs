@@ -26,7 +26,10 @@ namespace SanyaCards.Cards
             //Edits values on player when card is selected
             UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been added to player {player.playerID}.");
 
-            player.gameObject.AddComponent<StompMono>();
+            var child = new GameObject("Stomp");
+            child.transform.SetParent(player.transform);
+            child.AddComponent<StompMono>();
+            characterStats.objectsAddedToPlayer.Add(child);
         }
         public override void OnRemoveCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {

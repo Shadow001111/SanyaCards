@@ -20,11 +20,11 @@ namespace SanyaCards.Monos
         {
             abilityUseTime = Time.time;
 
-            player = GetComponent<Player>();
+            player = GetComponentInParent<Player>();
             player.data.block.BlockAction += this.OnBlock;
 
-            characterData = GetComponent<CharacterData>();
-            collider = GetComponent<CircleCollider2D>();
+            characterData = player.GetComponent<CharacterData>();
+            collider = player.GetComponent<CircleCollider2D>();
 
             var objectsToSpawn = ((GameObject)Resources.Load("0 cards/Explosive bullet")).GetComponent<Gun>().objectsToSpawn[0];
             var explosionEffect = Instantiate(objectsToSpawn.effect);
@@ -46,18 +46,20 @@ namespace SanyaCards.Monos
                 return;
             }
 
-            LayerMask obstacleLayers = (1 << 18) | (1 << 17) | (1 << 10) |(1 << 0);
-            Vector2 rayPosition = new Vector2(transform.position.x, transform.position.y - collider.radius - 0.5f);
+            float colliderOffset = collider.offset.y - collider.bounds.extents.y;
+
+            LayerMask obstacleLayers = (1 << 18) | (1 << 17) | (1 << 10) | (1 << 0);
+            Vector2 rayPosition = new Vector2(player.transform.position.x, player.transform.position.y + colliderOffset - 0.1f);
             RaycastHit2D hit = Physics2D.Raycast(rayPosition, Vector2.down, 100.0f, obstacleLayers);
 
-            bool usedAbility = false;
             if (hit.collider != null && hit.collider.gameObject)
             {
                 if (hit.distance < 5.0f)
                 {
+                    UnityEngine.Debug.Log($"Not enough  height: {hit.distance}");
                     return;
                 }
-                usedAbility = true;
+                abilityUseTime = Time.time + abilityCooldown;
 
                 // calculate attack power based on height
                 const float minHeight = 3.0f;
@@ -68,9 +70,7 @@ namespace SanyaCards.Monos
                 explosion.force = Mathf.Lerp(1.0f, 5.0f, power) * 10000.0f;
 
                 // move player
-                Vector3 newPosition = new Vector3(transform.position.x, hit.point.y + collider.radius + 0.1f, transform.position.z);
-                transform.position = newPosition;
-                player.GetComponentInParent<PlayerCollision>().IgnoreWallForFrames(2);
+                player.transform.position = new Vector3(player.transform.position.x, hit.point.y - colliderOffset, player.transform.position.z);
 
                 // set player velocity y to 0
                 var velocityField = typeof(PlayerVelocity).GetField("velocity", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
@@ -78,12 +78,9 @@ namespace SanyaCards.Monos
                 currentVelocity.y = 0;
                 velocityField.SetValue(characterData.playerVel, currentVelocity);
 
-                Vector3 hitPosition = new Vector3(hit.point.x + hit.normal.x * 0.1f, hit.point.y + hit.normal.y * 0.1f, 0.0f);
+                // creating explosion effect
+                Vector3 hitPosition = hit.point + hit.normal * 0.1f;
                 Instantiate(explosion.gameObject, hitPosition, Quaternion.identity);
-            }
-            if (usedAbility)
-            {
-                abilityUseTime = Time.time + abilityCooldown;
             }
         }
     }
