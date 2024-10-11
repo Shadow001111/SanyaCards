@@ -42,7 +42,7 @@ namespace SanyaCards.Cards
         }
         protected override string GetDescription()
         {
-            return "Stomps on block. Damage depends on height.";
+            return "When you block, unleash a powerful stomp that deals damage based on your height above the ground and your size.";
         }
         protected override GameObject GetCardArt()
         {

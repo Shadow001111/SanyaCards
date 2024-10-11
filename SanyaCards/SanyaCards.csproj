@@ -54,7 +54,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy /y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;$(ProjectDir)&quot;&#xD;&#xA;" />
+    <Exec Command="xcopy /y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;$(ProjectDir)&quot;&#xD;&#xA;xcopy /y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;C:\Users\ПК_Сергей\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\SanyaMods\BepInEx\plugins\SanyaTeam-SanyaCards&quot;&#xD;&#xA;" />
   </Target>
 
 </Project>

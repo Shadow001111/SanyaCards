@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 using UnityEngine;
 
@@ -36,7 +37,9 @@ namespace SanyaCards.Monos
             explosionEffect.AddComponent<SpawnedAttack>().spawner = player;
 
             explosion = explosionEffect.GetComponent<Explosion>();
-            explosion.range = 5.0f;
+            explosion.scaleRadius = true;
+            explosion.scaleDmg = true;
+            explosion.scaleForce = true;
         }
 
         public void OnBlock(BlockTrigger.BlockTriggerType triggerType)
@@ -46,7 +49,10 @@ namespace SanyaCards.Monos
                 return;
             }
 
+            var statModifiers = GetComponent<CharacterStatModifiers>();
+
             float colliderOffset = collider.offset.y - collider.bounds.extents.y;
+            float size = player.transform.localScale.x;
 
             LayerMask obstacleLayers = (1 << 18) | (1 << 17) | (1 << 10) | (1 << 0);
             Vector2 rayPosition = new Vector2(player.transform.position.x, player.transform.position.y + colliderOffset - 0.1f);
@@ -54,20 +60,22 @@ namespace SanyaCards.Monos
 
             if (hit.collider != null && hit.collider.gameObject)
             {
-                if (hit.distance < 5.0f)
+                const float minHeight = 4.0f;
+                const float maxHeight = 15.0f;
+
+                if (hit.distance < minHeight)
                 {
-                    UnityEngine.Debug.Log($"Not enough  height: {hit.distance}");
                     return;
                 }
                 abilityUseTime = Time.time + abilityCooldown;
 
                 // calculate attack power based on height
-                const float minHeight = 3.0f;
-                const float maxHeight = 15.0f;
-
                 float power = Mathf.Min((hit.distance - minHeight) / (maxHeight - minHeight), 1.0f);
-                explosion.damage = Mathf.Lerp(20.0f, 150.0f, power);
-                explosion.force = Mathf.Lerp(1.0f, 5.0f, power) * 10000.0f;
+                explosion.damage = Mathf.Lerp(10.0f, 120.0f, power);
+                explosion.force = Mathf.Lerp(1.0f, 5.0f, power) * 1000.0f;
+                explosion.range = Mathf.Lerp(4.0f, 7.0f, power);
+
+                UnityEngine.Debug.Log($"{power} {explosion.damage * size}");
 
                 // move player
                 player.transform.position = new Vector3(player.transform.position.x, hit.point.y - colliderOffset, player.transform.position.z);
@@ -80,7 +88,7 @@ namespace SanyaCards.Monos
 
                 // creating explosion effect
                 Vector3 hitPosition = hit.point + hit.normal * 0.1f;
-                Instantiate(explosion.gameObject, hitPosition, Quaternion.identity);
+                Instantiate(explosion.gameObject, hitPosition, Quaternion.identity).transform.localScale = Vector3.one * size;
             }
         }
     }
