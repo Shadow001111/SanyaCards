@@ -11,6 +11,7 @@ using SimulationChamber;
 using Photon.Pun;
 using System.Collections;
 using SanyaCards.Monos;
+using ModdingUtils.GameModes;
 
 
 namespace SanyaCards.Cards
@@ -34,6 +35,7 @@ namespace SanyaCards.Cards
             UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been added to player {player.playerID}.");
 
             splitBulletObject = new GameObject("A_SANYA_splitBullet");
+            splitBulletObject.hideFlags = HideFlags.HideAndDontSave;
             var objMono = splitBulletObject.AddComponent<SplitBulletMono>();
             objMono.player = player;
 

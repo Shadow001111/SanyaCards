@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using UnityEngine;
+using MapsExt;
+using MapsExt.Utils;
 
 namespace SanyaCards.Monos
 {
@@ -17,12 +19,12 @@ namespace SanyaCards.Monos
 
         private Explosion explosion;
 
-        private void Start()
+        void Start()
         {
             abilityUseTime = Time.time;
 
             player = GetComponentInParent<Player>();
-            player.data.block.BlockAction += this.OnBlock;
+            player.data.block.BlockAction += OnBlock;
 
             characterData = player.GetComponent<CharacterData>();
             collider = player.GetComponent<CircleCollider2D>();
@@ -42,6 +44,26 @@ namespace SanyaCards.Monos
             explosion.scaleForce = true;
         }
 
+        void OnDestroy()
+        {
+            player.data.block.BlockAction -= OnBlock;
+        }
+
+        // TODO: maybe use reflectections of MapsExtended methods
+        static Vector2 GetMapSize()
+        {
+            CustomMap customMap = MapManager.instance.GetCurrentCustomMap();
+            return (customMap == null) ? new Vector2(71.12f, 40f) : ConversionUtils.ScreenToWorldUnits(customMap.Settings.MapSize);
+        }
+
+        static float GetHeightToBottomEdge(Vector3 worldPosition)
+        {
+            Vector2 mapSize = GetMapSize();
+            float bottomEdgeY = -mapSize.y * 0.5f;
+            float distanceToBottom = worldPosition.y - bottomEdgeY;
+            return distanceToBottom;
+        }
+
         public void OnBlock(BlockTrigger.BlockTriggerType triggerType)
         {
             if (triggerType != BlockTrigger.BlockTriggerType.Default || Time.time < abilityUseTime)
@@ -49,11 +71,10 @@ namespace SanyaCards.Monos
                 return;
             }
 
-            var statModifiers = GetComponent<CharacterStatModifiers>();
-
             float colliderOffset = collider.offset.y - collider.bounds.extents.y;
             float size = player.transform.localScale.x;
 
+            // raycast
             LayerMask obstacleLayers = (1 << 18) | (1 << 17) | (1 << 10) | (1 << 0);
             Vector2 rayPosition = new Vector2(player.transform.position.x, player.transform.position.y + colliderOffset - 0.1f);
             RaycastHit2D hit = Physics2D.Raycast(rayPosition, Vector2.down, 100.0f, obstacleLayers);
@@ -67,6 +88,13 @@ namespace SanyaCards.Monos
                 {
                     return;
                 }
+
+                float edgeDistance = GetHeightToBottomEdge(rayPosition);
+                if (hit.distance >= edgeDistance)
+                {
+                    return;
+                }
+
                 abilityUseTime = Time.time + abilityCooldown;
 
                 // calculate attack power based on height
@@ -74,8 +102,6 @@ namespace SanyaCards.Monos
                 explosion.damage = Mathf.Lerp(10.0f, 120.0f, power);
                 explosion.force = Mathf.Lerp(1.0f, 5.0f, power) * 1000.0f;
                 explosion.range = Mathf.Lerp(4.0f, 7.0f, power);
-
-                UnityEngine.Debug.Log($"{power} {explosion.damage * size}");
 
                 // move player
                 player.transform.position = new Vector3(player.transform.position.x, hit.point.y - colliderOffset, player.transform.position.z);

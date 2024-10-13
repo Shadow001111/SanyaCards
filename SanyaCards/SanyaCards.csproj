@@ -27,6 +27,9 @@
     <Reference Include="InControl">
       <HintPath>bin\Release\netstandard2.1\InControl.dll</HintPath>
     </Reference>
+    <Reference Include="MapsExtended">
+      <HintPath>C:\Users\ПК_Сергей\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\SanyaMods\BepInEx\plugins\olavim-MapsExtended\MapsExtended.dll</HintPath>
+    </Reference>
     <Reference Include="ModdingUtils">
       <HintPath>C:\Users\ПК_Сергей\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\RoundsMods\BepInEx\plugins\Pykess-ModdingUtils\ModdingUtils.dll</HintPath>
     </Reference>

@@ -42,7 +42,7 @@ namespace SanyaCards.Cards
         }
         protected override string GetDescription()
         {
-            return "When you block, unleash a powerful stomp that deals damage based on your height above the ground and your size.";
+            return "When you block, unleash a powerful stomp that creates explosion, whose power depends on your height above the ground and your size.";
         }
         protected override GameObject GetCardArt()
         {

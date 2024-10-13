@@ -26,10 +26,15 @@ namespace SanyaCards.Monos
             abilityUseTime = Time.time;
 
             player = GetComponentInParent<Player>();
-            player.data.block.BlockAction += this.OnBlock;
+            player.data.block.BlockAction += OnBlock;
 
             stats = player.GetComponent<CharacterStatModifiers>();
             healthHandler = player.GetComponent<HealthHandler>();
+        }
+
+        void OnDestroy()
+        {
+            player.data.block.BlockAction -= OnBlock;
         }
 
         private void OnDisable()

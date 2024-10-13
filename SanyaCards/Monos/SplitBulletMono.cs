@@ -20,20 +20,20 @@ class SplitBulletMono : MonoBehaviour
     private void BuildSimulatedGun()
     {
         simulatedGun = new GameObject("A_SANYA_SimulatedGun").AddComponent<SimulatedGun>();
-        System.Type type = typeof(SimulatedGun);
-        FieldInfo fieldInfo = type.GetField("simulationID", BindingFlags.NonPublic | BindingFlags.Instance);
-        if (fieldInfo != null)
-        {
-            int ID = (int)fieldInfo.GetValue(simulatedGun);
-            UnityEngine.Debug.Log("SimID: " + ID);
-        }
+        //System.Type type = typeof(SimulatedGun);
+        //FieldInfo fieldInfo = type.GetField("simulationID", BindingFlags.NonPublic | BindingFlags.Instance);
+        //if (fieldInfo != null)
+        //{
+        //    int ID = (int)fieldInfo.GetValue(simulatedGun);
+        //    UnityEngine.Debug.Log("SimID: " + ID);
+        //}
 
         Gun gun = player.data.weaponHandler.gun;
         simulatedGun.CopyGunStatsExceptActions(gun);
         simulatedGun.CopyAttackAction(gun);
         simulatedGun.CopyShootProjectileAction(gun);
 
-        simulatedGun.numberOfProjectiles = bulletsAfterSplitCount / 2; // we shoot twice
+        simulatedGun.numberOfProjectiles = bulletsAfterSplitCount / 2; // we shoot with 2 guns
         simulatedGun.bursts = 1;
         simulatedGun.timeBetweenBullets = 0.0f;
 
