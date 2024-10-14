@@ -20,6 +20,8 @@ class SplitBulletMono : MonoBehaviour
     private void BuildSimulatedGun()
     {
         simulatedGun = new GameObject("A_SANYA_SimulatedGun").AddComponent<SimulatedGun>();
+        simulatedGun.gameObject.hideFlags = HideFlags.HideAndDontSave;
+        simulatedGun.gameObject.AddComponent<DestroyCheck>();
         //System.Type type = typeof(SimulatedGun);
         //FieldInfo fieldInfo = type.GetField("simulationID", BindingFlags.NonPublic | BindingFlags.Instance);
         //if (fieldInfo != null)
@@ -58,35 +60,34 @@ class SplitBulletMono : MonoBehaviour
         simulatedGun.chargeSpeedTo = 0.0f;
         simulatedGun.chargeSpreadTo = 0.0f;
 
-        // TODO: maybe there is no sense of instantiating new, because alawys instantiating from prefab
         var newObjectsToSpawn = new List<ObjectsToSpawn>();
         newInstacesOfAddToProjectile = new List<GameObject>();
         foreach (var oldObjectsToSpawn in gun.objectsToSpawn)
         {
             GameObject? addToProjectile = oldObjectsToSpawn.AddToProjectile;
-            bool addToProjectileChanged = false;
-            if (addToProjectile == null)
+            if (addToProjectile != null)
             {
-                continue;
-            }
-            if (addToProjectile.GetComponent<SplitBulletMono>() != null)
-            {
-                addToProjectile = Instantiate(addToProjectile);
-                newInstacesOfAddToProjectile.Add(addToProjectile);
-                addToProjectileChanged = true;
-
-                Destroy(addToProjectile.GetComponent<SplitBulletMono>());
-                addToProjectile.AddComponent<NoSelfCollide>();
-            }
-            if (addToProjectile.GetComponent<ScreenEdgeBounce>() != null)
-            {
-                if (!addToProjectileChanged)
+                bool addToProjectileChanged = false;
+                if (addToProjectile.GetComponent<SplitBulletMono>() != null)
                 {
                     addToProjectile = Instantiate(addToProjectile);
                     newInstacesOfAddToProjectile.Add(addToProjectile);
                     addToProjectileChanged = true;
+
+                    Destroy(addToProjectile.GetComponent<SplitBulletMono>());
+                    addToProjectile.AddComponent<NoSelfCollide>();
                 }
-                Destroy(addToProjectile.GetComponent<ScreenEdgeBounce>());
+
+                if (addToProjectile.GetComponent<ScreenEdgeBounce>() != null)
+                {
+                    if (!addToProjectileChanged)
+                    {
+                        addToProjectile = Instantiate(addToProjectile);
+                        newInstacesOfAddToProjectile.Add(addToProjectile);
+                        addToProjectileChanged = true;
+                    }
+                    Destroy(addToProjectile.GetComponent<ScreenEdgeBounce>());
+                }
             }
 
             newObjectsToSpawn.Add(new ObjectsToSpawn
@@ -100,7 +101,12 @@ class SplitBulletMono : MonoBehaviour
                 stickToBigTargets = oldObjectsToSpawn.stickToBigTargets,
                 stickToAllTargets = oldObjectsToSpawn.stickToAllTargets,
                 zeroZ = oldObjectsToSpawn.zeroZ,
-                AddToProjectile = addToProjectile
+                AddToProjectile = addToProjectile,
+                removeScriptsFromProjectileObject = oldObjectsToSpawn.removeScriptsFromProjectileObject,
+                scaleStacks = oldObjectsToSpawn.scaleStacks,
+                scaleStackM = oldObjectsToSpawn.scaleStackM,
+                scaleFromDamage = oldObjectsToSpawn.scaleFromDamage,
+                stacks = oldObjectsToSpawn.stacks
             });
         }
         simulatedGun.objectsToSpawn = newObjectsToSpawn.ToArray();

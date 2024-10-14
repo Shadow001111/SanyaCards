@@ -18,8 +18,6 @@ namespace SanyaCards.Cards
 {
     class SplitBulletCard : CustomCard
     {
-        private GameObject splitBulletObject;
-
         public override void SetupCard(CardInfo cardInfo, Gun gun, ApplyCardStats cardStats, CharacterStatModifiers statModifiers, Block block)
         {
             //Edits values on card itself, which are then applied to the player in `ApplyCardStats`
@@ -34,7 +32,7 @@ namespace SanyaCards.Cards
             //Edits values on player when card is selected
             UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been added to player {player.playerID}.");
 
-            splitBulletObject = new GameObject("A_SANYA_splitBullet");
+            GameObject splitBulletObject = new GameObject("A_SANYA_splitBullet");
             splitBulletObject.hideFlags = HideFlags.HideAndDontSave;
             var objMono = splitBulletObject.AddComponent<SplitBulletMono>();
             objMono.player = player;
@@ -55,6 +53,7 @@ namespace SanyaCards.Cards
             //Run when the card is removed from the player
             UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been removed from player {player.playerID}.");
         }
+
         protected override string GetTitle()
         {
             return "Split bullet";
