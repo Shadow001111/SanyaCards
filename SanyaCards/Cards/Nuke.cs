@@ -19,9 +19,9 @@ namespace SanyaCards.Cards
 
             cardInfo.allowMultiple = false;
 
-            gun.damage = 4.0f;
+            gun.damage = (1 + 2.0f);
             gun.drag = 0.5f;
-            gun.attackSpeed = 5.0f;
+            gun.attackSpeed = (1.0f + 3.5f);
             gun.reloadTimeAdd = 2.0f;
 
             gun.explodeNearEnemyRange = 100.0f;
@@ -99,7 +99,7 @@ namespace SanyaCards.Cards
                 {
                     positive = true,
                     stat = "Damage",
-                    amount = "+300%",
+                    amount = "+200%",
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 },
                 new CardInfoStat()
@@ -134,7 +134,7 @@ namespace SanyaCards.Cards
                 {
                     positive = false,
                     stat = "Attack speed",
-                    amount = "-400%",
+                    amount = "-350%",
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 },
                 new CardInfoStat()

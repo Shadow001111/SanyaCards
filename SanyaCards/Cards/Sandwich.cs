@@ -20,7 +20,7 @@ namespace SanyaCards.Cards
 
             cardInfo.allowMultiple = false;
             block.cdAdd = 0.25f;
-            statModifiers.health = 1.20f;
+            statModifiers.health = (1.0f + 0.5f);
         }
         public override void OnAddCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
@@ -43,7 +43,7 @@ namespace SanyaCards.Cards
         }
         protected override string GetDescription()
         {
-            return "Nom your way to full health! While eating you move slower. (Doesn't eat when full hp)";
+            return "Eating heals 300 hp. While eating you move slower.";
         }
         protected override GameObject GetCardArt()
         {
@@ -61,7 +61,7 @@ namespace SanyaCards.Cards
                 {
                     positive = true,
                     stat = "Health",
-                    amount = "+20%",
+                    amount = "+50%",
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 },
                 new CardInfoStat()
@@ -82,7 +82,7 @@ namespace SanyaCards.Cards
                 {
                     positive = false,
                     stat = "Movement speed when eating",
-                    amount = (100.0f / SandwichMono.abilityCooldown) + "%",
+                    amount = (100.0f / SandwichMono.abilitySpeedDivider) + "%",
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 },
                 new CardInfoStat()

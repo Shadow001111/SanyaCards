@@ -49,7 +49,7 @@ namespace SanyaCards.Monos
 
         public void OnBlock(BlockTrigger.BlockTriggerType triggerType)
         {
-            if (triggerType != BlockTrigger.BlockTriggerType.Default || Time.time < abilityUseTime || player.data.health == player.data.maxHealth)
+            if (triggerType != BlockTrigger.BlockTriggerType.Default || Time.time < abilityUseTime || player.data.health >= player.data.maxHealth)
             {
                 return;
             }
@@ -71,7 +71,7 @@ namespace SanyaCards.Monos
 
             stats.movementSpeed *= abilitySpeedDivider;
 
-            healthHandler.Heal(player.data.maxHealth - player.data.health);
+            healthHandler.Heal(300.0f);
 
             abilityActive = false;
         }
