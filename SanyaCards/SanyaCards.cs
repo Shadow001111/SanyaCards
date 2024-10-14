@@ -5,7 +5,7 @@ using SanyaCards.Cards;
 using HarmonyLib;
 using CardChoiceSpawnUniqueCardPatch.CustomCategories;
 
-
+// TODO: add MapsExtended dependency
 namespace SanyaCards
 {
     // These are the mods required for our mod to work
@@ -16,6 +16,7 @@ namespace SanyaCards
     [BepInDependency("com.willuwontu.rounds.simulationChamber", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("com.willuwontu.rounds.evenspreadpatch", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("root.patch.regeneration", BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency("io.olavim.rounds.mapsextended", BepInDependency.DependencyFlags.SoftDependency)]
     // Declares our mod to Bepin
     [BepInPlugin(ModId, ModName, Version)]
     // The game our mod is associated with
@@ -24,7 +25,7 @@ namespace SanyaCards
     {
         private const string ModId = "com.Shadow.SanyaCards";
         private const string ModName = "SanyaCards";
-        public const string Version = "0.4.2";
+        public const string Version = "0.4.3";
         public const string ModInitials = "SANYA";
 
         public static SanyaCards instance { get; private set; }
@@ -41,7 +42,7 @@ namespace SanyaCards
             instance = this;
             CustomCard.BuildCard<NukeCard>();
             CustomCard.BuildCard<ScoutTF2Card>();
-            CustomCard.BuildCard<SplitBulletCard>();
+            CustomCard.BuildCard<SplitBulletCard>(); // BROKEN
             CustomCard.BuildCard<PrecisionStrikeCard>();
             CustomCard.BuildCard<SprayAndPrayCard>();
             CustomCard.BuildCard<AmmoBoostCard>();

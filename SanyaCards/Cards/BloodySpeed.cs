@@ -17,7 +17,7 @@ namespace SanyaCards.Cards
             //Edits values on card itself, which are then applied to the player in `ApplyCardStats`
             UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been setup.");
 
-            gun.attackSpeed = 1.0f / (1.0f + 1.5f); // attackSpeed + 150%
+            gun.attackSpeed = 1.0f / (1.0f + 1.0f); // attackSpeed + 100%
             statModifiers.health = 0.8f;
         }
         public override void OnAddCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
@@ -55,7 +55,7 @@ namespace SanyaCards.Cards
                 {
                     positive = true,
                     stat = "Attack speed",
-                    amount = "+150%",
+                    amount = "+100%",
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 },
                 new CardInfoStat()

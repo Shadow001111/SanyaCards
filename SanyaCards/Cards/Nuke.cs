@@ -53,8 +53,9 @@ namespace SanyaCards.Cards
             explosion.force = 10000;
             explosion.range = 3;
 
-            gun.objectsToSpawn = new[]
-            {
+            var objectsToSpawnList = gun.objectsToSpawn.ToList();
+            objectsToSpawnList.Add
+            (
                 new ObjectsToSpawn
                 {
                     AddToProjectile = addToProjectile,
@@ -65,7 +66,8 @@ namespace SanyaCards.Cards
                     scaleStackM = 0.7f,
                     scaleStacks = true,
                 }
-            };
+            );
+            gun.objectsToSpawn = objectsToSpawnList.ToArray();
         }
         public override void OnRemoveCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {

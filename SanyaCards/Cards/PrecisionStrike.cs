@@ -85,7 +85,7 @@ namespace SanyaCards.Cards
                 {
                     positive = false,
                     stat = "Ammo",
-                    amount = "halved",
+                    amount = "-50%",
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 },
                 new CardInfoStat()

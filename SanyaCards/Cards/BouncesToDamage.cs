@@ -22,8 +22,40 @@ namespace SanyaCards.Cards
             //Edits values on player when card is selected
             UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been added to player {player.playerID}.");
 
-            gun.damage *= (1.0f + 0.25f * gun.reflects);
-            gun.reflects = 0;
+            if (gun.reflects <= 0)
+            {
+                return;
+            }
+
+            int removeBouncesCount = Mathf.Min(gun.reflects, 5);
+            gun.reflects -= removeBouncesCount;
+            gun.damage *= (1.0f + 0.25f * removeBouncesCount);
+
+            if (gun.reflects > 0)
+            {
+                return;
+            }
+
+            for (int i = 0; i < gun.objectsToSpawn.Length; i++)
+            {
+                ObjectsToSpawn obj = gun.objectsToSpawn[i];
+                GameObject? projectile = obj.AddToProjectile;
+                if (projectile == null)
+                {
+                    continue;
+                }
+
+                ScreenEdgeBounce? comp = projectile.GetComponent<ScreenEdgeBounce>();
+                if (comp == null)
+                {
+                    continue;
+                }
+
+                var newProjectile = Instantiate(projectile);
+                gun.objectsToSpawn[i].AddToProjectile = newProjectile;
+                comp = newProjectile.GetComponent<ScreenEdgeBounce>();
+                Destroy(comp);
+            }
         }
         public override void OnRemoveCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
@@ -37,7 +69,7 @@ namespace SanyaCards.Cards
         }
         protected override string GetDescription()
         {
-            return "Get rid of bounces for more damage";
+            return "Get rid of 5 bounces for more damage";
         }
         protected override GameObject GetCardArt()
         {

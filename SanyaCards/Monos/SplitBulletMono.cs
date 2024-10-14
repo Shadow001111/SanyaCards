@@ -58,33 +58,35 @@ class SplitBulletMono : MonoBehaviour
         simulatedGun.chargeSpeedTo = 0.0f;
         simulatedGun.chargeSpreadTo = 0.0f;
 
+        // TODO: maybe there is no sense of instantiating new, because alawys instantiating from prefab
         var newObjectsToSpawn = new List<ObjectsToSpawn>();
         newInstacesOfAddToProjectile = new List<GameObject>();
         foreach (var oldObjectsToSpawn in gun.objectsToSpawn)
         {
             GameObject? addToProjectile = oldObjectsToSpawn.AddToProjectile;
             bool addToProjectileChanged = false;
-            if (addToProjectile != null)
+            if (addToProjectile == null)
             {
-                if (addToProjectile.GetComponent<SplitBulletMono>() != null)
+                continue;
+            }
+            if (addToProjectile.GetComponent<SplitBulletMono>() != null)
+            {
+                addToProjectile = Instantiate(addToProjectile);
+                newInstacesOfAddToProjectile.Add(addToProjectile);
+                addToProjectileChanged = true;
+
+                Destroy(addToProjectile.GetComponent<SplitBulletMono>());
+                addToProjectile.AddComponent<NoSelfCollide>();
+            }
+            if (addToProjectile.GetComponent<ScreenEdgeBounce>() != null)
+            {
+                if (!addToProjectileChanged)
                 {
                     addToProjectile = Instantiate(addToProjectile);
                     newInstacesOfAddToProjectile.Add(addToProjectile);
                     addToProjectileChanged = true;
-
-                    Destroy(addToProjectile.GetComponent<SplitBulletMono>());
-                    addToProjectile.AddComponent<NoSelfCollide>();
                 }
-                if (addToProjectile.GetComponent<ScreenEdgeBounce>() != null)
-                {
-                    if (!addToProjectileChanged)
-                    {
-                        addToProjectile = Instantiate(addToProjectile);
-                        newInstacesOfAddToProjectile.Add(addToProjectile);
-                        addToProjectileChanged = true;
-                    }
-                    Destroy(addToProjectile.GetComponent<ScreenEdgeBounce>());
-                }
+                Destroy(addToProjectile.GetComponent<ScreenEdgeBounce>());
             }
 
             newObjectsToSpawn.Add(new ObjectsToSpawn
