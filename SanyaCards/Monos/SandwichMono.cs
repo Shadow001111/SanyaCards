@@ -21,6 +21,8 @@ namespace SanyaCards.Monos
         private HealthHandler healthHandler;
         private bool abilityActive = false;
 
+        static AudioSource playerAudioSource;
+
         private void Start()
         {
             abilityUseTime = Time.time;
@@ -30,6 +32,16 @@ namespace SanyaCards.Monos
 
             stats = player.GetComponent<CharacterStatModifiers>();
             healthHandler = player.GetComponent<HealthHandler>();
+
+            if (playerAudioSource == null)
+            {
+                playerAudioSource = player.gameObject.AddComponent<AudioSource>();
+                UnityEngine.Debug.Log("[SanyaCards][Sandwich] playerAudioSource created");
+            }
+            else
+            {
+                UnityEngine.Debug.Log("[SanyaCards][Sandwich] playerAudioSource already was created");
+            }
         }
 
         void OnDestroy()
@@ -66,6 +78,22 @@ namespace SanyaCards.Monos
             abilityActive = true;
 
             stats.movementSpeed /= abilitySpeedDivider;
+
+            if (playerAudioSource != null)
+            {
+                if (Assets.eatingSandwich != null)
+                {
+                    playerAudioSource.PlayOneShot(Assets.eatingSandwich);
+                }
+                else
+                {
+                    UnityEngine.Debug.Log("[SanyaCards][Sandwich] Assets.eatingSandwich is null");
+                }
+            }
+            else
+            {
+                UnityEngine.Debug.Log("[SanyaCards][Sandwich] playerAudioSource Is null");
+            }
 
             yield return new WaitForSeconds(abilityDuration);
 

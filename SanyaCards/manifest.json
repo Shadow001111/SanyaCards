@@ -1,6 +1,6 @@
 {
   "name": "SanyaCards",
-  "version_number": "0.4.3",
+  "version_number": "0.5.0",
   "website_url": "https://github.com/Shadow001111/SanyaCards",
   "description": "+9 cards. Some parts may be broken. I am just learning stuff.",
   "dependencies": [
@@ -8,8 +8,6 @@
     "Pykess-ModdingUtils-0.4.8",
     "Pykess-CardChoiceSpawnUniqueCardPatch-0.1.10",
     "Pykess-PlayerJumpPatch-0.0.2",
-    //"willuwontu-SimulationChamber-0.0.3",
-    //"willuwontu-EvenSpreadPatch-0.0.2",
     "olavim-MapsExtended-1.4.2"
   ]
 }

@@ -12,6 +12,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="AssetsEmbedded\sanyacards" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="AssetsEmbedded\sanyacards" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>C:\Users\ПК_Сергей\Downloads\BepInEx_x64_5.4.19.0\BepInEx\core\0Harmony.dll</HintPath>
     </Reference>
@@ -47,6 +55,12 @@
     </Reference>
     <Reference Include="UnityEngine">
       <HintPath>bin\Debug\netstandard2.1\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule">
+      <HintPath>bin\Debug\netstandard2.1\UnityEngine.AssetBundleModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>bin\Debug\netstandard2.1\UnityEngine.AudioModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>bin\Debug\netstandard2.1\UnityEngine.CoreModule.dll</HintPath>
