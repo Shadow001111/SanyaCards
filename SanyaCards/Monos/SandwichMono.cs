@@ -14,16 +14,16 @@ namespace SanyaCards.Monos
         public static readonly float abilityDuration = 2.0f;
         public static readonly float abilitySpeedDivider = 4.0f;
 
-        private float abilityUseTime;
+        float abilityUseTime;
 
-        private Player player;
-        private CharacterStatModifiers stats;
-        private HealthHandler healthHandler;
-        private bool abilityActive = false;
+        Player player;
+        CharacterStatModifiers stats;
+        HealthHandler healthHandler;
+        bool abilityActive = false;
 
         static AudioSource playerAudioSource;
 
-        private void Start()
+        void Start()
         {
             abilityUseTime = Time.time;
 
@@ -55,6 +55,7 @@ namespace SanyaCards.Monos
             {
                 StopAllCoroutines();
                 abilityActive = false;
+                abilityUseTime = Time.time;
                 stats.movementSpeed *= abilitySpeedDivider;
             }
         }
@@ -79,21 +80,7 @@ namespace SanyaCards.Monos
 
             stats.movementSpeed /= abilitySpeedDivider;
 
-            if (playerAudioSource != null)
-            {
-                if (Assets.eatingSandwich != null)
-                {
-                    playerAudioSource.PlayOneShot(Assets.eatingSandwich);
-                }
-                else
-                {
-                    UnityEngine.Debug.Log("[SanyaCards][Sandwich] Assets.eatingSandwich is null");
-                }
-            }
-            else
-            {
-                UnityEngine.Debug.Log("[SanyaCards][Sandwich] playerAudioSource Is null");
-            }
+            playerAudioSource.PlayOneShot(Assets.eatingSandwich);
 
             yield return new WaitForSeconds(abilityDuration);
 

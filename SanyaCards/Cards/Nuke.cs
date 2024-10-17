@@ -41,12 +41,12 @@ namespace SanyaCards.Cards
             var addToProjectile = Instantiate(objectsToSpawn.AddToProjectile);
             addToProjectile.hideFlags = HideFlags.HideAndDontSave;
             addToProjectile.transform.position = new Vector3(1000, 0, 0);
-            addToProjectile.name = "A_SANYA_NukeBullet";
+            addToProjectile.name = "SANYA_NukeBullet";
 
             var effect = Instantiate(objectsToSpawn.effect);
             effect.hideFlags = HideFlags.HideAndDontSave;
             effect.transform.position = new Vector3(1000, 0, 0);
-            effect.name = "A_SANYA_NukeExplosion";
+            effect.name = "SANYA_NukeExplosion";
 
             Destroy(effect.GetComponent<RemoveAfterSeconds>());
             var explosion = effect.GetComponent<Explosion>();

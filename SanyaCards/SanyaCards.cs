@@ -4,6 +4,8 @@ using UnboundLib.Cards;
 using SanyaCards.Cards;
 using HarmonyLib;
 using CardChoiceSpawnUniqueCardPatch.CustomCategories;
+using ModdingUtils;
+using ModdingUtils.MonoBehaviours;
 
 // TODO: add MapsExtended dependency
 namespace SanyaCards
@@ -24,7 +26,7 @@ namespace SanyaCards
     {
         private const string ModId = "com.Shadow.SanyaCards";
         private const string ModName = "SanyaCards";
-        public const string Version = "0.5.0";
+        public const string Version = "0.5.1";
         public const string ModInitials = "SANYA";
 
         public static SanyaCards instance { get; private set; }
@@ -49,6 +51,7 @@ namespace SanyaCards
             CustomCard.BuildCard<SandwichCard>();
             CustomCard.BuildCard<BloodySpeedCard>();
             CustomCard.BuildCard<StompCard>();
+            CustomCard.BuildCard<FleeCard>();
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define SHOW_HIT_POINTS
+
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
@@ -11,13 +13,26 @@ namespace SanyaCards.Monos
     class StompMono : MonoBehaviour
     {
         public static readonly float abilityCooldown = 2.0f;
-        private float abilityUseTime;
+        float abilityUseTime;
 
-        private Player player;
-        private CharacterData characterData;
-        private CircleCollider2D collider;
+        Player player;
+        CharacterData characterData;
+        CircleCollider2D collider;
 
-        private Explosion explosion;
+        Explosion explosion;
+        class StompRaycastInfo
+        {
+            public float dx = 0.0f;
+            public float distance = -1.0f;
+            public Vector2 point = Vector2.zero;
+            public Vector2 normal = Vector2.zero;
+        }
+
+        static readonly int raycastHitCubesCount = 5;
+        StompRaycastInfo[] raycastHitInfo;
+#if SHOW_HIT_POINTS
+        GameObject[] raycastHitCubes;
+#endif
 
         void Start()
         {
@@ -42,11 +57,128 @@ namespace SanyaCards.Monos
             explosion.scaleRadius = true;
             explosion.scaleDmg = true;
             explosion.scaleForce = true;
+
+            // raycastHitInfo
+            raycastHitInfo = new StompRaycastInfo[raycastHitCubesCount];
+            for (int i = 0; i < raycastHitCubesCount; i++)
+            {
+                raycastHitInfo[i] = new StompRaycastInfo();
+            }
+
+#if SHOW_HIT_POINTS
+            //rayscastHitCubes
+            GameObject rhCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            rhCube.transform.localScale = Vector3.one * 0.2f;
+            var rhCubeRenderer = rhCube.GetComponent<Renderer>();
+            rhCubeRenderer.material.color = new UnityEngine.Color(0.0f, 2.0f, 0.0f);
+
+            raycastHitCubes = new GameObject[raycastHitCubesCount];
+            raycastHitCubes[0] = rhCube;
+            for (int i = 1; i < raycastHitCubesCount; i++)
+            {
+                raycastHitCubes[i] = Instantiate(rhCube);
+            }
+#endif
+        }
+
+        void Update()
+        {
+#if SHOW_HIT_POINTS
+            GetRaycasts();
+
+            float radius = collider.bounds.extents.y;
+            for (int i = 0; i < raycastHitCubesCount; i++)
+            {
+                StompRaycastInfo info = raycastHitInfo[i];
+                bool active = info.distance >= 0.0f;
+                raycastHitCubes[i].SetActive(active);
+                if (!active)
+                {
+                    continue;
+                }
+                float radius2 = Mathf.Sqrt(radius * radius - info.dx * info.dx);
+                float colliderOffset = collider.offset.y - radius2 - 0.05f;
+                raycastHitCubes[i].transform.position = new Vector2(player.transform.position.x + info.dx, player.transform.position.y + colliderOffset - info.distance);
+            }
+#endif
+        }
+
+        void GetRaycasts()
+        {
+            float radius = collider.bounds.extents.x;
+            LayerMask obstacleLayers = (1 << 18) | (1 << 17) | (1 << 10) | (1 << 0);
+            float raycastHalfWidth = Mathf.Min(radius * 0.5f, 1.0f);
+
+            for (int i = 0; i < raycastHitCubesCount; i++)
+            {
+                float dx0 = -1.0f + 2.0f * i / (raycastHitCubesCount - 1);
+                float dx = dx0 * raycastHalfWidth;
+
+                var info = raycastHitInfo[i];
+                float radius2 = Mathf.Sqrt(radius * radius - dx * dx);
+                float distance = -1.0f;
+
+                float colliderOffset = collider.offset.y - radius2 - 0.05f;
+                Vector2 rayPosition = new Vector2(player.transform.position.x + dx, player.transform.position.y + colliderOffset);
+                RaycastHit2D hit = Physics2D.Raycast(rayPosition, Vector2.down, 100.0f, obstacleLayers);
+
+                distance = hit.distance;
+                if (hit.collider == null || hit.collider.gameObject == null)
+                {
+                    distance = -1.0f;
+                }
+                else if (hit.distance >= GetHeightToBottomEdge(rayPosition))
+                {
+                    distance = -1.0f;
+                }
+
+                info.dx = dx;
+                info.distance = distance;
+                info.point = hit.point;
+                info.normal = hit.normal;
+            }
+        }
+
+        StompRaycastInfo GetRaycastInfo()
+        {
+            int center = raycastHitCubesCount / 2;
+            StompRaycastInfo info = raycastHitInfo[center];
+            if (info.distance >= 0.0f)
+            {
+                return info;
+            }
+
+            for (int offset = 1; offset <= center; offset++)
+            {
+                info = raycastHitInfo[center - offset];
+                if (info.distance >= 0.0f)
+                {
+                    return info;
+                }
+
+                info = raycastHitInfo[center + offset];
+                if (info.distance >= 0.0f)
+                {
+                    return info;
+                }
+            }
+            return raycastHitInfo[center];
+        }
+
+        void OnDisable()
+        {
+            abilityUseTime = Time.time;
         }
 
         void OnDestroy()
         {
             player.data.block.BlockAction -= OnBlock;
+#if SHOW_HIT_POINTS
+            for (int i = 1; i < raycastHitCubesCount; i++)
+            {
+                Destroy(raycastHitCubes[i]);
+            }
+#endif
         }
 
         // TODO: maybe use reflectections of MapsExtended methods
@@ -71,51 +203,48 @@ namespace SanyaCards.Monos
                 return;
             }
 
-            float colliderOffset = collider.offset.y - collider.bounds.extents.y;
-            float size = player.transform.localScale.x;
+            GetRaycasts();
+            StompRaycastInfo hit = GetRaycastInfo();
+            if (hit.distance < 0.0f)
+            {
+                return;
+            }
 
             // raycast
-            LayerMask obstacleLayers = (1 << 18) | (1 << 17) | (1 << 10) | (1 << 0);
-            Vector2 rayPosition = new Vector2(player.transform.position.x, player.transform.position.y + colliderOffset - 0.1f);
-            RaycastHit2D hit = Physics2D.Raycast(rayPosition, Vector2.down, 100.0f, obstacleLayers);
+            const float minHeight = 4.0f;
+            const float maxHeight = 15.0f;
 
-            if (hit.collider != null && hit.collider.gameObject)
+            if (hit.distance < minHeight)
             {
-                const float minHeight = 4.0f;
-                const float maxHeight = 15.0f;
-
-                if (hit.distance < minHeight)
-                {
-                    return;
-                }
-
-                float edgeDistance = GetHeightToBottomEdge(rayPosition);
-                if (hit.distance >= edgeDistance)
-                {
-                    return;
-                }
-
-                abilityUseTime = Time.time + abilityCooldown;
-
-                // calculate attack power based on height
-                float power = Mathf.Min((hit.distance - minHeight) / (maxHeight - minHeight), 1.0f);
-                explosion.damage = Mathf.Lerp(10.0f, 120.0f, power);
-                explosion.force = Mathf.Lerp(1.0f, 5.0f, power) * 1000.0f;
-                explosion.range = Mathf.Lerp(4.0f, 7.0f, power);
-
-                // move player
-                player.transform.position = new Vector3(player.transform.position.x, hit.point.y - colliderOffset, player.transform.position.z);
-
-                // set player velocity y to 0
-                var velocityField = typeof(PlayerVelocity).GetField("velocity", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                Vector2 currentVelocity = (Vector2)velocityField.GetValue(characterData.playerVel);
-                currentVelocity.y = 0;
-                velocityField.SetValue(characterData.playerVel, currentVelocity);
-
-                // creating explosion effect
-                Vector3 hitPosition = hit.point + hit.normal * 0.1f;
-                Instantiate(explosion.gameObject, hitPosition, Quaternion.identity).transform.localScale = Vector3.one * size;
+                return;
             }
+
+            abilityUseTime = Time.time + abilityCooldown;
+
+            // calculate attack power based on height
+            float power = Mathf.Min((hit.distance - minHeight) / (maxHeight - minHeight), 1.0f);
+            explosion.damage = Mathf.Lerp(10.0f, 120.0f, power);
+            explosion.force = Mathf.Lerp(1.0f, 5.0f, power) * 1000.0f;
+            explosion.range = Mathf.Lerp(4.0f, 7.0f, power);
+            float shake = Mathf.Lerp(1.0f, 5.0f, power) * player.transform.localScale.x;
+            UnityEngine.Debug.Log(power);
+
+            // move player
+            float radius = collider.bounds.extents.y;
+            float radius2 = Mathf.Sqrt(radius * radius - hit.dx * hit.dx);
+            float colliderOffset = collider.offset.y - radius2 - 0.05f;
+            player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + colliderOffset - hit.distance, player.transform.position.z);
+
+            // set player velocity y to 0
+            var velocityField = typeof(PlayerVelocity).GetField("velocity", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            Vector2 currentVelocity = (Vector2)velocityField.GetValue(characterData.playerVel);
+            currentVelocity.y = 0;
+            velocityField.SetValue(characterData.playerVel, currentVelocity);
+
+            // creating explosion effect
+            Vector3 hitPosition = hit.point + hit.normal * 0.1f;
+            Instantiate(explosion.gameObject, hitPosition, Quaternion.identity).transform.localScale = Vector3.one * player.transform.localScale.x;
+            //GamefeelManager.GameFeel(new Vector2(0.0f, -shake));
         }
     }
 }
