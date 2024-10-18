@@ -18,6 +18,7 @@ namespace SanyaCards.Monos
         CircleCollider2D collider;
 
         Explosion explosion;
+
         class StompRaycastInfo
         {
             public float dx = 0.0f;
@@ -30,7 +31,7 @@ namespace SanyaCards.Monos
         static readonly int raycastHitsCount = 5;
         StompRaycastInfo[] raycastHitsInfo;
 
-        static readonly int positionIndicatorSegments = 10;
+        static readonly int positionIndicatorSegments = 25;
         LineRenderer positionIndicatorLineRenderer;
 
         void Start()
@@ -64,14 +65,18 @@ namespace SanyaCards.Monos
                 raycastHitsInfo[i] = new StompRaycastInfo();
             }
 
-            positionIndicatorLineRenderer = gameObject.AddComponent<LineRenderer>();
-            positionIndicatorLineRenderer.positionCount = positionIndicatorSegments + 1;
-            positionIndicatorLineRenderer.useWorldSpace = true;
-            positionIndicatorLineRenderer.material = new Material(Shader.Find("Unlit/Color"));
-            positionIndicatorLineRenderer.startColor = UnityEngine.Color.white;
-            positionIndicatorLineRenderer.endColor = positionIndicatorLineRenderer.startColor;
-            positionIndicatorLineRenderer.startWidth = 0.1f;
-            positionIndicatorLineRenderer.endWidth = positionIndicatorLineRenderer.startWidth;
+            //
+            if (player.data.view.IsMine)
+            {
+                positionIndicatorLineRenderer = gameObject.AddComponent<LineRenderer>();
+                positionIndicatorLineRenderer.positionCount = positionIndicatorSegments + 1;
+                positionIndicatorLineRenderer.useWorldSpace = true;
+                positionIndicatorLineRenderer.material = new Material(Shader.Find("Unlit/Color"));
+                positionIndicatorLineRenderer.startColor = UnityEngine.Color.white;
+                positionIndicatorLineRenderer.endColor = positionIndicatorLineRenderer.startColor;
+                positionIndicatorLineRenderer.startWidth = 0.1f;
+                positionIndicatorLineRenderer.endWidth = positionIndicatorLineRenderer.startWidth;
+            }
         }
 
         void Update()
@@ -83,7 +88,7 @@ namespace SanyaCards.Monos
 
             DoRaycasts();
             StompRaycastInfo info = GetRaycastInfo();
-            if (info.stompDistance >= 4.0f)
+            if (info.stompDistance >= 4f)
             {
                 positionIndicatorLineRenderer.enabled = true;
 
@@ -94,15 +99,22 @@ namespace SanyaCards.Monos
 
                 float angle = 0f;
                 float angleStep = 360f / positionIndicatorSegments;
+                float progress = 360f * Mathf.Min(1f, 1f - (abilityUseTime - Time.time) / abilityCooldown);
 
+                positionIndicatorLineRenderer.positionCount = Mathf.FloorToInt(progress / angleStep) + 1;
                 for (int i = 0; i <= positionIndicatorSegments; i++)
                 {
+                    if (angle > progress)
+                    {
+                        break;
+                    }
                     float x = Mathf.Cos(Mathf.Deg2Rad * angle) * playerRadius;
                     float y = Mathf.Sin(Mathf.Deg2Rad * angle) * playerRadius;
 
                     positionIndicatorLineRenderer.SetPosition(i, position + new Vector3(x, y, 0f));
                     angle += angleStep;
                 }
+                UnityEngine.Debug.Log(positionIndicatorLineRenderer.positionCount);
             }
             else
             {
