@@ -1,6 +1,4 @@
-﻿#define SHOW_HIT_POINTS
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
@@ -29,11 +27,11 @@ namespace SanyaCards.Monos
             public Vector2 normal = Vector2.zero;
         }
 
-        static readonly int raycastHitCubesCount = 5;
-        StompRaycastInfo[] raycastHitInfo;
-#if SHOW_HIT_POINTS
-        GameObject[] raycastHitCubes;
-#endif
+        static readonly int raycastHitsCount = 5;
+        StompRaycastInfo[] raycastHitsInfo;
+
+        static readonly int positionIndicatorSegments = 10;
+        LineRenderer positionIndicatorLineRenderer;
 
         void Start()
         {
@@ -60,62 +58,70 @@ namespace SanyaCards.Monos
             explosion.scaleForce = true;
 
             // raycastHitInfo
-            raycastHitInfo = new StompRaycastInfo[raycastHitCubesCount];
-            for (int i = 0; i < raycastHitCubesCount; i++)
+            raycastHitsInfo = new StompRaycastInfo[raycastHitsCount];
+            for (int i = 0; i < raycastHitsCount; i++)
             {
-                raycastHitInfo[i] = new StompRaycastInfo();
+                raycastHitsInfo[i] = new StompRaycastInfo();
             }
 
-#if SHOW_HIT_POINTS
-            //rayscastHitCubes
-            GameObject rhCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            rhCube.transform.localScale = Vector3.one * 0.2f;
-            var rhCubeRenderer = rhCube.GetComponent<Renderer>();
-            rhCubeRenderer.material.color = new UnityEngine.Color(0.0f, 2.0f, 0.0f);
-
-            raycastHitCubes = new GameObject[raycastHitCubesCount];
-            raycastHitCubes[0] = rhCube;
-            for (int i = 1; i < raycastHitCubesCount; i++)
-            {
-                raycastHitCubes[i] = Instantiate(rhCube);
-            }
-#endif
+            positionIndicatorLineRenderer = gameObject.AddComponent<LineRenderer>();
+            positionIndicatorLineRenderer.positionCount = positionIndicatorSegments + 1;
+            positionIndicatorLineRenderer.useWorldSpace = true;
+            positionIndicatorLineRenderer.material = new Material(Shader.Find("Unlit/Color"));
+            positionIndicatorLineRenderer.startColor = UnityEngine.Color.white;
+            positionIndicatorLineRenderer.endColor = positionIndicatorLineRenderer.startColor;
+            positionIndicatorLineRenderer.startWidth = 0.1f;
+            positionIndicatorLineRenderer.endWidth = positionIndicatorLineRenderer.startWidth;
         }
 
         void Update()
         {
-#if SHOW_HIT_POINTS
-            GetRaycasts();
-
-            float radius = collider.bounds.extents.y;
-            for (int i = 0; i < raycastHitCubesCount; i++)
+            if (!player.data.view.IsMine)
             {
-                StompRaycastInfo info = raycastHitInfo[i];
-                bool active = info.distance >= 0.0f;
-                raycastHitCubes[i].SetActive(active);
-                if (!active)
-                {
-                    continue;
-                }
-                float radius2 = Mathf.Sqrt(radius * radius - info.dx * info.dx);
-                float colliderOffset = collider.offset.y - radius2 - 0.05f;
-                raycastHitCubes[i].transform.position = new Vector2(player.transform.position.x + info.dx, player.transform.position.y + colliderOffset - info.distance);
+                return;
             }
-#endif
+
+            DoRaycasts();
+            StompRaycastInfo info = GetRaycastInfo();
+            if (info.stompDistance >= 4.0f)
+            {
+                positionIndicatorLineRenderer.enabled = true;
+
+                float playerRadius = collider.bounds.extents.y;
+                float radius2 = Mathf.Sqrt(playerRadius * playerRadius - info.dx * info.dx);
+                float colliderOffset = collider.offset.y - radius2 - 0.05f;
+                Vector3 position = new Vector3(player.transform.position.x, player.transform.position.y + colliderOffset - info.distance + playerRadius, player.transform.position.z);
+
+                float angle = 0f;
+                float angleStep = 360f / positionIndicatorSegments;
+
+                for (int i = 0; i <= positionIndicatorSegments; i++)
+                {
+                    float x = Mathf.Cos(Mathf.Deg2Rad * angle) * playerRadius;
+                    float y = Mathf.Sin(Mathf.Deg2Rad * angle) * playerRadius;
+
+                    positionIndicatorLineRenderer.SetPosition(i, position + new Vector3(x, y, 0f));
+                    angle += angleStep;
+                }
+            }
+            else
+            {
+                positionIndicatorLineRenderer.enabled = false;
+            }
         }
 
-        void GetRaycasts()
+        void DoRaycasts()
         {
             float radius = collider.bounds.extents.x;
             LayerMask obstacleLayers = (1 << 18) | (1 << 17) | (1 << 10) | (1 << 0);
             float raycastHalfWidth = Mathf.Min(radius * 0.5f, 1.0f);
 
-            for (int i = 0; i < raycastHitCubesCount; i++)
+            for (int i = 0; i < raycastHitsCount; i++)
             {
-                float dx0 = -1.0f + 2.0f * i / (raycastHitCubesCount - 1);
+                float dx0 = -1.0f + 2.0f * i / (raycastHitsCount - 1);
                 float dx = dx0 * raycastHalfWidth;
 
-                var info = raycastHitInfo[i];
+                var info = raycastHitsInfo[i];
                 float radius2 = Mathf.Sqrt(radius * radius - dx * dx);
                 float distance = -1.0f;
 
@@ -143,8 +149,8 @@ namespace SanyaCards.Monos
 
         StompRaycastInfo GetRaycastInfo()
         {
-            int center = raycastHitCubesCount / 2;
-            StompRaycastInfo info = raycastHitInfo[center];
+            int center = raycastHitsCount / 2;
+            StompRaycastInfo info = raycastHitsInfo[center];
             if (info.stompDistance >= 0.0f)
             {
                 return info;
@@ -152,19 +158,19 @@ namespace SanyaCards.Monos
 
             for (int offset = 1; offset <= center; offset++)
             {
-                info = raycastHitInfo[center - offset];
+                info = raycastHitsInfo[center - offset];
                 if (info.stompDistance >= 0.0f)
                 {
                     return info;
                 }
 
-                info = raycastHitInfo[center + offset];
+                info = raycastHitsInfo[center + offset];
                 if (info.stompDistance >= 0.0f)
                 {
                     return info;
                 }
             }
-            return raycastHitInfo[center];
+            return raycastHitsInfo[center];
         }
 
         void OnDisable()
@@ -175,7 +181,7 @@ namespace SanyaCards.Monos
         void OnDestroy()
         {
             player.data.block.BlockAction -= OnBlock;
-#if SHOW_HIT_POINTS
+#if STOMP_MONO_DEBUG
             for (int i = 1; i < raycastHitCubesCount; i++)
             {
                 Destroy(raycastHitCubes[i]);
@@ -205,14 +211,10 @@ namespace SanyaCards.Monos
                 return;
             }
 
-            GetRaycasts();
-            StompRaycastInfo hit = GetRaycastInfo();
-            if (hit.stompDistance < 0.0f)
-            {
-                return;
-            }
-
             // raycast
+            DoRaycasts();
+            StompRaycastInfo hit = GetRaycastInfo();
+
             const float minHeight = 4.0f;
             const float maxHeight = 15.0f;
 
@@ -234,7 +236,7 @@ namespace SanyaCards.Monos
             float radius = collider.bounds.extents.y;
             float radius2 = Mathf.Sqrt(radius * radius - hit.dx * hit.dx);
             float colliderOffset = collider.offset.y - radius2 - 0.05f;
-            player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + colliderOffset - hit.distance, player.transform.position.z);
+            player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y - colliderOffset - hit.distance, player.transform.position.z);
 
             // set player velocity y to 0
             var velocityField = typeof(PlayerVelocity).GetField("velocity", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
