@@ -1,4 +1,4 @@
-﻿//#define SHOW_HIT_POINTS
+﻿#define SHOW_HIT_POINTS
 
 using System;
 using System.Collections.Generic;
@@ -24,6 +24,7 @@ namespace SanyaCards.Monos
         {
             public float dx = 0.0f;
             public float distance = -1.0f;
+            public float stompDistance = -1.0f;
             public Vector2 point = Vector2.zero;
             public Vector2 normal = Vector2.zero;
         }
@@ -134,6 +135,7 @@ namespace SanyaCards.Monos
 
                 info.dx = dx;
                 info.distance = distance;
+                info.stompDistance = distance - (radius - radius2);
                 info.point = hit.point;
                 info.normal = hit.normal;
             }
@@ -143,7 +145,7 @@ namespace SanyaCards.Monos
         {
             int center = raycastHitCubesCount / 2;
             StompRaycastInfo info = raycastHitInfo[center];
-            if (info.distance >= 0.0f)
+            if (info.stompDistance >= 0.0f)
             {
                 return info;
             }
@@ -151,13 +153,13 @@ namespace SanyaCards.Monos
             for (int offset = 1; offset <= center; offset++)
             {
                 info = raycastHitInfo[center - offset];
-                if (info.distance >= 0.0f)
+                if (info.stompDistance >= 0.0f)
                 {
                     return info;
                 }
 
                 info = raycastHitInfo[center + offset];
-                if (info.distance >= 0.0f)
+                if (info.stompDistance >= 0.0f)
                 {
                     return info;
                 }
@@ -205,7 +207,7 @@ namespace SanyaCards.Monos
 
             GetRaycasts();
             StompRaycastInfo hit = GetRaycastInfo();
-            if (hit.distance < 0.0f)
+            if (hit.stompDistance < 0.0f)
             {
                 return;
             }
@@ -214,7 +216,7 @@ namespace SanyaCards.Monos
             const float minHeight = 4.0f;
             const float maxHeight = 15.0f;
 
-            if (hit.distance < minHeight)
+            if (hit.stompDistance < minHeight)
             {
                 return;
             }
@@ -222,12 +224,11 @@ namespace SanyaCards.Monos
             abilityUseTime = Time.time + abilityCooldown;
 
             // calculate attack power based on height
-            float power = Mathf.Min((hit.distance - minHeight) / (maxHeight - minHeight), 1.0f);
+            float power = Mathf.Min((hit.stompDistance - minHeight) / (maxHeight - minHeight), 1.0f);
             explosion.damage = Mathf.Lerp(10.0f, 120.0f, power);
             explosion.force = Mathf.Lerp(1.0f, 5.0f, power) * 1000.0f;
             explosion.range = Mathf.Lerp(4.0f, 7.0f, power);
-            float shake = Mathf.Lerp(1.0f, 5.0f, power) * player.transform.localScale.x;
-            UnityEngine.Debug.Log(power);
+            //float shake = Mathf.Lerp(1.0f, 5.0f, power) * player.transform.localScale.x;
 
             // move player
             float radius = collider.bounds.extents.y;
@@ -244,7 +245,7 @@ namespace SanyaCards.Monos
             // creating explosion effect
             Vector3 hitPosition = hit.point + hit.normal * 0.1f;
             Instantiate(explosion.gameObject, hitPosition, Quaternion.identity).transform.localScale = Vector3.one * player.transform.localScale.x;
-            //GamefeelManager.GameFeel(new Vector2(0.0f, -shake));
+            //GamefeelManager.GameFeel(new Vector2(shake, 1.0f));
         }
     }
 }

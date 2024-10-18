@@ -41,7 +41,7 @@ namespace SanyaCards.Monos
             }
 
 
-            if (target)
+            if (target != null)
             {
                 turnOn();
             }

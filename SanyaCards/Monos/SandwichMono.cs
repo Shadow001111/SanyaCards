@@ -21,7 +21,7 @@ namespace SanyaCards.Monos
         HealthHandler healthHandler;
         bool abilityActive = false;
 
-        static AudioSource playerAudioSource;
+        AudioSource playerAudioSource;
 
         void Start()
         {
@@ -33,15 +33,7 @@ namespace SanyaCards.Monos
             stats = player.GetComponent<CharacterStatModifiers>();
             healthHandler = player.GetComponent<HealthHandler>();
 
-            if (playerAudioSource == null)
-            {
-                playerAudioSource = player.gameObject.AddComponent<AudioSource>();
-                UnityEngine.Debug.Log("[SanyaCards][Sandwich] playerAudioSource created");
-            }
-            else
-            {
-                UnityEngine.Debug.Log("[SanyaCards][Sandwich] playerAudioSource already was created");
-            }
+            playerAudioSource = gameObject.AddComponent<AudioSource>();
         }
 
         void OnDestroy()
