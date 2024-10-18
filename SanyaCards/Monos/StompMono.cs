@@ -99,22 +99,19 @@ namespace SanyaCards.Monos
 
                 float angle = 0f;
                 float angleStep = 360f / positionIndicatorSegments;
-                float progress = 360f * Mathf.Min(1f, 1f - (abilityUseTime - Time.time) / abilityCooldown);
+                float progress = Mathf.Min(1f, 1f - (abilityUseTime - Time.time) / abilityCooldown);
+                float progress360 = 360f * progress;
 
-                positionIndicatorLineRenderer.positionCount = Mathf.FloorToInt(progress / angleStep) + 1;
-                for (int i = 0; i <= positionIndicatorSegments; i++)
+                int segmentsCount = Mathf.CeilToInt(progress * positionIndicatorSegments);
+                positionIndicatorLineRenderer.positionCount = segmentsCount + 1;
+                for (int i = 0; i < positionIndicatorLineRenderer.positionCount; i++)
                 {
-                    if (angle > progress)
-                    {
-                        break;
-                    }
                     float x = Mathf.Cos(Mathf.Deg2Rad * angle) * playerRadius;
                     float y = Mathf.Sin(Mathf.Deg2Rad * angle) * playerRadius;
 
                     positionIndicatorLineRenderer.SetPosition(i, position + new Vector3(x, y, 0f));
                     angle += angleStep;
                 }
-                UnityEngine.Debug.Log(positionIndicatorLineRenderer.positionCount);
             }
             else
             {
