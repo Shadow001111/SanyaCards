@@ -11,6 +11,8 @@ namespace SanyaCards.Monos
     class StompMono : MonoBehaviour
     {
         public static readonly float abilityCooldown = 2.0f;
+        static readonly float stompMinHeight = 4.0f;
+        static readonly float stompMaxHeight = 15.0f;
         float abilityUseTime;
 
         Player player;
@@ -30,7 +32,6 @@ namespace SanyaCards.Monos
         }
 
         static readonly int raycastHitsCount = 5;
-        StompRaycastInfo[] raycastHitsInfo;
 
         static readonly int positionIndicatorSegments = 25;
         LineRenderer positionIndicatorLineRenderer;
@@ -59,13 +60,6 @@ namespace SanyaCards.Monos
             explosion.scaleDmg = true;
             explosion.scaleForce = true;
 
-            // raycastHitInfo
-            raycastHitsInfo = new StompRaycastInfo[raycastHitsCount];
-            for (int i = 0; i < raycastHitsCount; i++)
-            {
-                raycastHitsInfo[i] = new StompRaycastInfo();
-            }
-
             //
             playerIsMine = player.data.view.IsMine && player.GetComponentInChildren<PlayerAI>() == null;
             if (playerIsMine)
@@ -88,100 +82,96 @@ namespace SanyaCards.Monos
                 return;
             }
 
-            DoRaycasts();
-            StompRaycastInfo info = GetRaycastInfo();
-            if (info.stompDistance >= 4f)
-            {
-                positionIndicatorLineRenderer.enabled = true;
-
-                float playerRadius = collider.bounds.extents.y;
-                float radius2 = Mathf.Sqrt(playerRadius * playerRadius - info.dx * info.dx);
-                float colliderOffset = collider.offset.y - radius2 - 0.05f;
-                Vector3 position = new Vector3(player.transform.position.x, player.transform.position.y + colliderOffset - info.distance + playerRadius, player.transform.position.z);
-
-                float angle = 0f;
-                float angleStep = 360f / positionIndicatorSegments;
-                float progress = Mathf.Min(1f, 1f - (abilityUseTime - Time.time) / abilityCooldown);
-                float progress360 = 360f * progress;
-
-                int segmentsCount = Mathf.CeilToInt(progress * positionIndicatorSegments);
-                positionIndicatorLineRenderer.positionCount = segmentsCount + 1;
-                for (int i = 0; i < positionIndicatorLineRenderer.positionCount; i++)
-                {
-                    float x = Mathf.Cos(Mathf.Deg2Rad * angle) * playerRadius;
-                    float y = Mathf.Sin(Mathf.Deg2Rad * angle) * playerRadius;
-
-                    positionIndicatorLineRenderer.SetPosition(i, position + new Vector3(x, y, 0f));
-                    angle += angleStep;
-                }
-            }
-            else
+            StompRaycastInfo? info = DoRaycasts();
+            if (info == null)
             {
                 positionIndicatorLineRenderer.enabled = false;
+                return;
+            }
+
+            positionIndicatorLineRenderer.enabled = true;
+
+            float playerRadius = collider.bounds.extents.y;
+            float radius2 = Mathf.Sqrt(playerRadius * playerRadius - info.dx * info.dx);
+            float colliderOffset = collider.offset.y - radius2 - 0.05f;
+            Vector3 position = new Vector3(player.transform.position.x, player.transform.position.y + colliderOffset - info.distance + playerRadius, player.transform.position.z);
+
+            float angle = 0f;
+            float angleStep = 360f / positionIndicatorSegments;
+            float progress = Mathf.Min(1f, 1f - (abilityUseTime - Time.time) / abilityCooldown);
+            float progress360 = 360f * progress;
+
+            int segmentsCount = Mathf.CeilToInt(progress * positionIndicatorSegments);
+            positionIndicatorLineRenderer.positionCount = segmentsCount + 1;
+            for (int i = 0; i < positionIndicatorLineRenderer.positionCount; i++)
+            {
+                float x = Mathf.Cos(Mathf.Deg2Rad * angle) * playerRadius;
+                float y = Mathf.Sin(Mathf.Deg2Rad * angle) * playerRadius;
+
+                positionIndicatorLineRenderer.SetPosition(i, position + new Vector3(x, y, 0f));
+                angle += angleStep;
             }
         }
 
-        void DoRaycasts()
+        void DoRaycastAt(int i, ref StompRaycastInfo info)
         {
             float radius = collider.bounds.extents.x;
             LayerMask obstacleLayers = (1 << 18) | (1 << 17) | (1 << 10) | (1 << 0);
             float raycastHalfWidth = Mathf.Min(radius * 0.5f, 1.0f);
 
-            for (int i = 0; i < raycastHitsCount; i++)
+            float dx0 = -1.0f + 2.0f * i / (raycastHitsCount - 1);
+            float dx = dx0 * raycastHalfWidth;
+
+            float radius2 = Mathf.Sqrt(radius * radius - dx * dx);
+            float distance = -1.0f;
+
+            float colliderOffset = collider.offset.y - radius2 - 0.05f;
+            Vector2 rayPosition = new Vector2(player.transform.position.x + dx, player.transform.position.y + colliderOffset);
+            RaycastHit2D hit = Physics2D.Raycast(rayPosition, Vector2.down, 100.0f, obstacleLayers);
+
+            distance = hit.distance;
+            if (hit.collider == null || hit.collider.gameObject == null)
             {
-                float dx0 = -1.0f + 2.0f * i / (raycastHitsCount - 1);
-                float dx = dx0 * raycastHalfWidth;
-
-                var info = raycastHitsInfo[i];
-                float radius2 = Mathf.Sqrt(radius * radius - dx * dx);
-                float distance = -1.0f;
-
-                float colliderOffset = collider.offset.y - radius2 - 0.05f;
-                Vector2 rayPosition = new Vector2(player.transform.position.x + dx, player.transform.position.y + colliderOffset);
-                RaycastHit2D hit = Physics2D.Raycast(rayPosition, Vector2.down, 100.0f, obstacleLayers);
-
-                distance = hit.distance;
-                if (hit.collider == null || hit.collider.gameObject == null)
-                {
-                    distance = -1.0f;
-                }
-                else if (hit.distance >= GetHeightToBottomEdge(rayPosition))
-                {
-                    distance = -1.0f;
-                }
-
-                info.dx = dx;
-                info.distance = distance;
-                info.stompDistance = distance - (radius - radius2);
-                info.point = hit.point;
-                info.normal = hit.normal;
+                distance = -1.0f;
             }
+            else if (hit.distance >= GetHeightToBottomEdge(rayPosition))
+            {
+                distance = -1.0f;
+            }
+
+            info.dx = dx;
+            info.distance = distance;
+            info.stompDistance = distance - (radius - radius2);
+            info.point = hit.point;
+            info.normal = hit.normal;
         }
 
-        StompRaycastInfo GetRaycastInfo()
+        StompRaycastInfo? DoRaycasts()
         {
+            StompRaycastInfo info = new StompRaycastInfo();
+
             int center = raycastHitsCount / 2;
-            StompRaycastInfo info = raycastHitsInfo[center];
-            if (info.stompDistance >= 0.0f)
+            DoRaycastAt(center, ref info);
+            if (info.stompDistance >= stompMinHeight)
             {
                 return info;
             }
 
             for (int offset = 1; offset <= center; offset++)
             {
-                info = raycastHitsInfo[center - offset];
-                if (info.stompDistance >= 0.0f)
+                DoRaycastAt(center - offset, ref info);
+                if (info.stompDistance >= stompMinHeight)
                 {
                     return info;
                 }
 
-                info = raycastHitsInfo[center + offset];
-                if (info.stompDistance >= 0.0f)
+                DoRaycastAt(center + offset, ref info);
+                if (info.stompDistance >= stompMinHeight)
                 {
                     return info;
                 }
             }
-            return raycastHitsInfo[center];
+            return null;
         }
 
         void OnDisable()
@@ -192,12 +182,6 @@ namespace SanyaCards.Monos
         void OnDestroy()
         {
             player.data.block.BlockAction -= OnBlock;
-#if STOMP_MONO_DEBUG
-            for (int i = 1; i < raycastHitCubesCount; i++)
-            {
-                Destroy(raycastHitCubes[i]);
-            }
-#endif
         }
 
         // TODO: maybe use reflectections of MapsExtended methods
@@ -223,13 +207,8 @@ namespace SanyaCards.Monos
             }
 
             // raycast
-            DoRaycasts();
-            StompRaycastInfo hit = GetRaycastInfo();
-
-            const float minHeight = 4.0f;
-            const float maxHeight = 15.0f;
-
-            if (hit.stompDistance < minHeight)
+            StompRaycastInfo? hit = DoRaycasts();
+            if (hit == null)
             {
                 return;
             }
@@ -237,7 +216,7 @@ namespace SanyaCards.Monos
             abilityUseTime = Time.time + abilityCooldown;
 
             // calculate attack power based on height
-            float power = Mathf.Min((hit.stompDistance - minHeight) / (maxHeight - minHeight), 1.0f);
+            float power = Mathf.Min((hit.stompDistance - stompMinHeight) / (stompMaxHeight - stompMinHeight), 1.0f);
             explosion.damage = Mathf.Lerp(10.0f, 120.0f, power);
             explosion.force = Mathf.Lerp(1.0f, 5.0f, power) * 1000.0f;
             explosion.range = Mathf.Lerp(4.0f, 7.0f, power);
@@ -247,6 +226,7 @@ namespace SanyaCards.Monos
             float radius = collider.bounds.extents.y;
             float radius2 = Mathf.Sqrt(radius * radius - hit.dx * hit.dx);
             float colliderOffset = collider.offset.y - radius2 - 0.05f;
+            player.GetComponent<PlayerCollision>().IgnoreWallForFrames(2);
             player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y - colliderOffset - hit.distance, player.transform.position.z);
 
             // set player velocity y to 0
