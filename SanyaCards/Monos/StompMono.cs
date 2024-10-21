@@ -14,6 +14,7 @@ namespace SanyaCards.Monos
         float abilityUseTime;
 
         Player player;
+        bool playerIsMine;
         CharacterData characterData;
         CircleCollider2D collider;
 
@@ -66,7 +67,8 @@ namespace SanyaCards.Monos
             }
 
             //
-            if (player.data.view.IsMine)
+            playerIsMine = player.data.view.IsMine && player.GetComponentInChildren<PlayerAI>() == null;
+            if (playerIsMine)
             {
                 positionIndicatorLineRenderer = gameObject.AddComponent<LineRenderer>();
                 positionIndicatorLineRenderer.positionCount = positionIndicatorSegments + 1;
@@ -81,7 +83,7 @@ namespace SanyaCards.Monos
 
         void FixedUpdate()
         {
-            if (!player.data.view.IsMine)
+            if (!playerIsMine)
             {
                 return;
             }
