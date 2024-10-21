@@ -79,7 +79,7 @@ namespace SanyaCards.Monos
             }
         }
 
-        void Update()
+        void FixedUpdate()
         {
             if (!player.data.view.IsMine)
             {
