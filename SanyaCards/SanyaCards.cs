@@ -53,6 +53,7 @@ namespace SanyaCards
             CustomCard.BuildCard<StompCard>();
             CustomCard.BuildCard<FleeCard>();
             CustomCard.BuildCard<AccuracyCard>();
+            CustomCard.BuildCard<MagneticBulletsCard>(); // TEST
         }
     }
 }
