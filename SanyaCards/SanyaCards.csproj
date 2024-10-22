@@ -13,6 +13,8 @@
 
   <ItemGroup>
     <None Remove="AssetsEmbedded\sanyacards" />
+    <None Remove="build_zip.bat" />
+    <None Remove="SanyaCards.zip" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,8 +1,8 @@
 {
   "name": "SanyaCards",
-  "version_number": "0.5.3",
+  "version_number": "0.5.4",
   "website_url": "https://github.com/Shadow001111/SanyaCards",
-  "description": "+10 cards",
+  "description": "+11 cards",
   "dependencies": [
     "BepInEx-BepInExPack_ROUNDS-5.4.1901",
     "Pykess-ModdingUtils-0.4.8",

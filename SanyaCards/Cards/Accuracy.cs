@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace SanyaCards.Cards
 {
-    class BouncesToDamageCard : CustomCard
+    class AccuracyCard : CustomCard
     {
         public override void SetupCard(CardInfo cardInfo, Gun gun, ApplyCardStats cardStats, CharacterStatModifiers statModifiers, Block block)
         {
@@ -22,51 +22,24 @@ namespace SanyaCards.Cards
             //Edits values on player when card is selected
             UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been added to player {player.playerID}.");
 
-            if (gun.reflects <= 0)
+            if (gun.spread > 0.0f)
             {
-                return;
-            }
-
-            int removeBouncesCount = Mathf.Min(gun.reflects, 5);
-            gun.reflects -= removeBouncesCount;
-            gun.damage *= (1.0f + 0.25f * removeBouncesCount);
-
-            if (gun.reflects > 0)
-            {
-                return;
-            }
-
-            for (int i = 0; i < gun.objectsToSpawn.Length; i++)
-            {
-                GameObject? projectile = gun.objectsToSpawn[i].AddToProjectile;
-                if (projectile == null)
-                {
-                    continue;
-                }
-
-                if (projectile.GetComponent<ScreenEdgeBounce>() == null)
-                {
-                    continue;
-                }
-
-                var newProjectile = Instantiate(projectile);
-                gun.objectsToSpawn[i].AddToProjectile = newProjectile;
-                Destroy(newProjectile.GetComponent<ScreenEdgeBounce>());
+                UnityEngine.Debug.Log(gun.spread);
+                gun.spread = Mathf.Max(0.0f, gun.spread - 0.05f);
             }
         }
         public override void OnRemoveCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
             //Run when the card is removed from the player
             UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been removed from player {player.playerID}.");
-
         }
         protected override string GetTitle()
         {
-            return "Bounces to damage";
+            return "Accuracy";
         }
         protected override string GetDescription()
         {
-            return "Get rid of 5 bounces for more damage";
+            return "Decrease spread";
         }
         protected override GameObject GetCardArt()
         {
@@ -74,7 +47,7 @@ namespace SanyaCards.Cards
         }
         protected override CardInfo.Rarity GetRarity()
         {
-            return CardInfo.Rarity.Uncommon;
+            return CardInfo.Rarity.Common;
         }
         protected override CardInfoStat[] GetStats()
         {
@@ -83,22 +56,15 @@ namespace SanyaCards.Cards
                 new CardInfoStat()
                 {
                     positive = true,
-                    stat = "Damage",
-                    amount = "+25% per bounce",
-                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
-                },
-                new CardInfoStat()
-                {
-                    positive = false,
-                    stat = "Bounces",
-                    amount = "-5",
+                    stat = "Spread",
+                    amount = "-5%",
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 }
             };
         }
         protected override CardThemeColor.CardThemeColorType GetTheme()
         {
-            return CardThemeColor.CardThemeColorType.DestructiveRed;
+            return CardThemeColor.CardThemeColorType.FirepowerYellow;
         }
         public override string GetModName()
         {
