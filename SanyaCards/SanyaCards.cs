@@ -6,6 +6,8 @@ using HarmonyLib;
 using CardChoiceSpawnUniqueCardPatch.CustomCategories;
 using ModdingUtils;
 using ModdingUtils.MonoBehaviours;
+using UnityEngine;
+//using UnboundLib.Utils.UI;
 
 // TODO: add MapsExtended dependency
 namespace SanyaCards
@@ -26,7 +28,7 @@ namespace SanyaCards
     {
         private const string ModId = "com.Shadow.SanyaCards";
         private const string ModName = "SanyaCards";
-        public const string Version = "0.5.4";
+        public const string Version = "0.6.0";
         public const string ModInitials = "SANYA";
 
         public static SanyaCards instance { get; private set; }
@@ -41,6 +43,9 @@ namespace SanyaCards
         void Start()
         {
             instance = this;
+            //Unbound.RegisterCredits();
+            //Unbound.RegisterMenu();
+
             CustomCard.BuildCard<NukeCard>();
             CustomCard.BuildCard<ScoutTF2Card>();
             //CustomCard.BuildCard<SplitBulletCard>(); // BROKEN
@@ -53,7 +58,14 @@ namespace SanyaCards
             CustomCard.BuildCard<StompCard>();
             CustomCard.BuildCard<FleeCard>();
             CustomCard.BuildCard<AccuracyCard>();
-            CustomCard.BuildCard<MagneticBulletsCard>(); // TEST
+            CustomCard.BuildCard<MagneticBulletsCard>();
+            //CustomCard.BuildCard<ExplosionResistanceCard>(); BROKEN
         }
+
+        //void NewGUI(GameObject menu)
+        //{
+        //    //MenuHandler.CreateSlider();
+        //    //MenuHandler.CreateText();
+        //}
     }
 }
