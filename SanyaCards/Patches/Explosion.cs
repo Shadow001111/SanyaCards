@@ -11,6 +11,44 @@ using UnityEngine;
 
 namespace SanyaCards.Patches
 {
+    [HarmonyPatch(typeof(Explosion), "DoExplosionEffects")]
+    public class ExplosionPatch
+    {
+        static bool Prefix(Explosion __instance, Collider2D hitCol, float rangeMultiplier, float distance)
+        {
+            Damagable componentInParent = hitCol.gameObject.GetComponentInParent<Damagable>();
+            if (!componentInParent)
+            {
+                return true;
+            }
+            var stats = componentInParent.GetComponent<CharacterStatModifiers>();
+            if (!stats)
+            {
+                return true;
+            }
+            __instance.damage *= 1.0f - stats.GetAdditionalData().explosionResistance;
+            UnityEngine.Debug.Log("Prefix: " + stats.GetAdditionalData().explosionResistance);
+            return true;
+        }
+
+        static void Postfix(Explosion __instance, Collider2D hitCol, float rangeMultiplier, float distance)
+        {
+            Damagable componentInParent = hitCol.gameObject.GetComponentInParent<Damagable>();
+            if (!componentInParent)
+            {
+                return;
+            }
+            var stats = componentInParent.GetComponent<CharacterStatModifiers>();
+            if (!stats)
+            {
+                return;
+            }
+            __instance.damage /= 1.0f - stats.GetAdditionalData().explosionResistance;
+            UnityEngine.Debug.Log("Postfix: " + stats.GetAdditionalData().explosionResistance);
+        }
+    }
+
+
     //[HarmonyDebug]
     //[HarmonyPatch(typeof(Explosion))]
     //[HarmonyPatch("DoExplosionEffects")]

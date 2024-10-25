@@ -59,7 +59,7 @@ namespace SanyaCards
             CustomCard.BuildCard<FleeCard>();
             CustomCard.BuildCard<AccuracyCard>();
             CustomCard.BuildCard<MagneticBulletsCard>();
-            //CustomCard.BuildCard<ExplosionResistanceCard>(); BROKEN
+            CustomCard.BuildCard<ExplosionResistanceCard>();
         }
 
         //void NewGUI(GameObject menu)

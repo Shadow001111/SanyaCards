@@ -25,7 +25,7 @@ namespace SanyaCards.Cards
             UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been added to player {player.playerID}.");
 
             var additionalData = characterStats.GetAdditionalData();
-            additionalData.explosionResistance = Mathf.Min(0.8f, additionalData.explosionResistance + 0.3f);
+            additionalData.explosionResistance = Mathf.Min(0.5f, additionalData.explosionResistance + 0.25f);
         }
         public override void OnRemoveCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
@@ -39,7 +39,7 @@ namespace SanyaCards.Cards
         }
         protected override string GetDescription()
         {
-            return "Increase your explosion resistance by 30% (80% max)";
+            return "Increase your explosion resistance by 25% (50% max)";
         }
         protected override GameObject GetCardArt()
         {
@@ -57,7 +57,7 @@ namespace SanyaCards.Cards
                 {
                     positive = true,
                     stat = "Explosive resistance",
-                    amount = "+30%",
+                    amount = "+25%",
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 }
             };
