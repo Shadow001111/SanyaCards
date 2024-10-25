@@ -12,7 +12,9 @@ namespace SanyaCards.Monos
     {
         public static readonly float abilityCooldown = 10.0f;
         public static readonly float abilityDuration = 2.0f;
+        public static readonly float heal = 300.0f;
         public static readonly float abilitySpeedDivider = 4.0f;
+        static readonly int bitesCount = 5;
 
         float abilityUseTime;
 
@@ -41,14 +43,14 @@ namespace SanyaCards.Monos
             player.data.block.BlockAction -= OnBlock;
         }
 
-        private void OnDisable()
+        void OnDisable()
         {
             if (abilityActive)
             {
                 StopAllCoroutines();
                 abilityActive = false;
                 abilityUseTime = Time.time;
-                stats.movementSpeed *= abilitySpeedDivider;
+                DisableEffect();
             }
         }
 
@@ -62,7 +64,7 @@ namespace SanyaCards.Monos
             StartCoroutine(useAbility());
         }
 
-        private IEnumerator useAbility()
+        IEnumerator useAbility()
         {
             if (abilityActive)
             {
@@ -70,17 +72,29 @@ namespace SanyaCards.Monos
             }
             abilityActive = true;
 
-            stats.movementSpeed /= abilitySpeedDivider;
+            EnableEffect();
 
             playerAudioSource.PlayOneShot(Assets.eatingSandwich);
 
-            yield return new WaitForSeconds(abilityDuration);
+            for (int i = 0; i < bitesCount; i++)
+            {
+                healthHandler.Heal(heal / bitesCount);
+                yield return new WaitForSeconds(abilityDuration / bitesCount);
+            }
 
-            stats.movementSpeed *= abilitySpeedDivider;
-
-            healthHandler.Heal(300.0f);
+            DisableEffect();
 
             abilityActive = false;
+        }
+
+        void EnableEffect()
+        {
+            stats.movementSpeed /= abilitySpeedDivider;
+        }
+
+        void DisableEffect()
+        {
+            stats.movementSpeed *= abilitySpeedDivider;
         }
     }
 }

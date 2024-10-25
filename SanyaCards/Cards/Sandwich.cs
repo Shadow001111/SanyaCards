@@ -43,7 +43,7 @@ namespace SanyaCards.Cards
         }
         protected override string GetDescription()
         {
-            return "Eating heals 300 hp. While eating you move slower.";
+            return $"Eating heals {SandwichMono.heal} hp. While eating you move slower.";
         }
         protected override GameObject GetCardArt()
         {
@@ -68,21 +68,21 @@ namespace SanyaCards.Cards
                 {
                     positive = false,
                     stat = "Ability cooldown",
-                    amount = SandwichMono.abilityCooldown + "s",
+                    amount = (int)SandwichMono.abilityCooldown + "s",
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 },
                 new CardInfoStat()
                 {
                     positive = false,
                     stat = "Eating time",
-                    amount = SandwichMono.abilityDuration + "s",
+                    amount = (int)SandwichMono.abilityDuration + "s",
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 },
                 new CardInfoStat()
                 {
                     positive = false,
                     stat = "Movement speed when eating",
-                    amount = (100.0f / SandwichMono.abilitySpeedDivider) + "%",
+                    amount = (int)(100.0f / SandwichMono.abilitySpeedDivider) + "%",
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 },
                 new CardInfoStat()

@@ -27,7 +27,6 @@ namespace SanyaCards.Patches
                 return true;
             }
             __instance.damage *= 1.0f - stats.GetAdditionalData().explosionResistance;
-            UnityEngine.Debug.Log("Prefix: " + stats.GetAdditionalData().explosionResistance);
             return true;
         }
 
@@ -44,7 +43,6 @@ namespace SanyaCards.Patches
                 return;
             }
             __instance.damage /= 1.0f - stats.GetAdditionalData().explosionResistance;
-            UnityEngine.Debug.Log("Postfix: " + stats.GetAdditionalData().explosionResistance);
         }
     }
 
