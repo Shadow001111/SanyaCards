@@ -66,7 +66,7 @@ namespace SanyaCards.Cards
         }
         protected override string GetDescription()
         {
-            return "Get rid of 5 bounces for more damage";
+            return "Get +25% damage per removed bounce";
         }
         protected override GameObject GetCardArt()
         {
@@ -80,13 +80,6 @@ namespace SanyaCards.Cards
         {
             return new CardInfoStat[]
             {
-                new CardInfoStat()
-                {
-                    positive = true,
-                    stat = "Damage",
-                    amount = "+25% per bounce",
-                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
-                },
                 new CardInfoStat()
                 {
                     positive = false,
@@ -103,6 +96,20 @@ namespace SanyaCards.Cards
         public override string GetModName()
         {
             return SanyaCards.ModInitials;
+        }
+
+        public static bool Validation(Player player, CardInfo card)
+        {
+            if (card.name != "__SANYA__Bounces to damage")
+            {
+                return true;
+            }
+            int reflects = player.data.weaponHandler.gun.reflects;
+            if (reflects > 0)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

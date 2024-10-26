@@ -2,6 +2,8 @@
 using InControl;
 using UnityEngine;
 using System.Reflection;
+using System.Collections.Generic;
+using System;
 
 namespace SanyaCards.Patches
 {

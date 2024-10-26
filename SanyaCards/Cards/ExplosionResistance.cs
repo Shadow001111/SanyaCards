@@ -70,5 +70,19 @@ namespace SanyaCards.Cards
         {
             return SanyaCards.ModInitials;
         }
+
+        public static bool Validation(Player player, CardInfo card)
+        {
+            if (card.name != "__SANYA__Explosion resistance")
+            {
+                return true;
+            }
+            float resistance = player.GetComponent<CharacterStatModifiers>().GetAdditionalData().explosionResistance;
+            if (resistance >= 0.5f)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

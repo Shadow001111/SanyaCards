@@ -33,13 +33,13 @@ namespace SanyaCards
 
         public static SanyaCards instance { get; private set; }
 
-
         void Awake()
         {
             // Use this to call any harmony patch files your mod may have
             var harmony = new Harmony(ModId);
             harmony.PatchAll();
         }
+
         void Start()
         {
             instance = this;
@@ -60,6 +60,9 @@ namespace SanyaCards
             CustomCard.BuildCard<AccuracyCard>();
             CustomCard.BuildCard<MagneticBulletsCard>();
             CustomCard.BuildCard<ExplosionResistanceCard>();
+
+            ModdingUtils.Utils.Cards.instance.AddCardValidationFunction(ExplosionResistanceCard.Validation);
+            ModdingUtils.Utils.Cards.instance.AddCardValidationFunction(BouncesToDamageCard.Validation);
         }
 
         //void NewGUI(GameObject menu)
