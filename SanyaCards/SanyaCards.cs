@@ -28,7 +28,7 @@ namespace SanyaCards
     {
         private const string ModId = "com.Shadow.SanyaCards";
         private const string ModName = "SanyaCards";
-        public const string Version = "0.6.0";
+        public const string Version = "0.7.0";
         public const string ModInitials = "SANYA";
 
         public static SanyaCards instance { get; private set; }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 using System.Reflection;
 
 namespace SanyaCards.Monos
@@ -13,7 +10,7 @@ namespace SanyaCards.Monos
 
         public int ignoreTeamID;
 
-        static FieldInfo playerVelocityField = typeof(PlayerVelocity).GetField("velocity", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        static FieldInfo playerVelocityField = typeof(PlayerVelocity).GetField("velocity", BindingFlags.NonPublic | BindingFlags.Instance);
 
         void Start()
         {
@@ -21,8 +18,8 @@ namespace SanyaCards.Monos
             {
                 return;
             }
-            moveTransform = transform.parent.gameObject.GetComponent<MoveTransform>();
-            bullet = transform.parent.gameObject.GetComponent<ProjectileHit>();
+            moveTransform = transform.parent.GetComponent<MoveTransform>();
+            bullet = transform.parent.GetComponent<ProjectileHit>();
         }
 
         void FixedUpdate()
@@ -32,25 +29,29 @@ namespace SanyaCards.Monos
                 return;
             }
 
-            float gravity = 700.0f;
+            float gravity = 120.0f;
 
-            Vector2 bulletPosition = transform.position;
             float bulletMass = (bullet.damage / 55f) * bullet.dealDamageMultiplierr;
-            bulletMass = Mathf.Min(25f, bulletMass * bulletMass);
+            bulletMass = Mathf.Min(40f, 3.37f * bulletMass);
 
-            foreach (var player in PlayerManager.instance.players)
+            foreach (Player player in PlayerManager.instance.players)
             {
                 if (player.teamID == ignoreTeamID)
                 {
                     continue;
                 }
 
-                Vector2 playerPosition = player.transform.position;
+                Vector2 dpos = (Vector2)player.transform.position - (Vector2)transform.position;
+                float distance = dpos.magnitude;
+                if (distance < 5.0f)
+                {
+                    Destroy(this);
+                }
+
+                Vector2 acc = dpos.normalized / Mathf.Max(5f, distance) * Time.fixedDeltaTime * gravity;
+
                 float playerMass = player.transform.localScale.x;
                 playerMass = Mathf.Min(20f, playerMass * playerMass);
-
-                Vector2 dpos = playerPosition - bulletPosition;
-                Vector2 acc = dpos.normalized / Mathf.Max(9f, dpos.sqrMagnitude) * Time.fixedDeltaTime * gravity;
 
                 moveTransform.velocity.x += (playerMass * acc).x;
                 moveTransform.velocity.y += (playerMass * acc).y;
