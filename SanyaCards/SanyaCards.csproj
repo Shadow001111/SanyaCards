@@ -14,7 +14,11 @@
   <ItemGroup>
     <None Remove="AssetsEmbedded\sanyacards" />
     <None Remove="build_zip.bat" />
+    <None Remove="icon.png" />
+    <None Remove="README.md" />
+    <None Remove="SanyaCards.dll" />
     <None Remove="SanyaCards.zip" />
+    <None Remove="test_build.bat" />
   </ItemGroup>
 
   <ItemGroup>

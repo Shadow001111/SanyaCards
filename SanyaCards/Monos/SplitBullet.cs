@@ -21,7 +21,6 @@ class SplitBulletMono : MonoBehaviour
     {
         simulatedGun = new GameObject("A_SANYA_SimulatedGun").AddComponent<SimulatedGun>();
         simulatedGun.gameObject.hideFlags = HideFlags.HideAndDontSave;
-        simulatedGun.gameObject.AddComponent<DestroyCheck>();
         //System.Type type = typeof(SimulatedGun);
         //FieldInfo fieldInfo = type.GetField("simulationID", BindingFlags.NonPublic | BindingFlags.Instance);
         //if (fieldInfo != null)

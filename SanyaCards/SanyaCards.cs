@@ -60,6 +60,7 @@ namespace SanyaCards
             CustomCard.BuildCard<AccuracyCard>();
             CustomCard.BuildCard<MagneticBulletsCard>();
             CustomCard.BuildCard<ExplosionResistanceCard>();
+            CustomCard.BuildCard<GlueCard>();
 
             ModdingUtils.Utils.Cards.instance.AddCardValidationFunction(ExplosionResistanceCard.Validation);
             ModdingUtils.Utils.Cards.instance.AddCardValidationFunction(BouncesToDamageCard.Validation);

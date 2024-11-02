@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
@@ -35,6 +36,8 @@ namespace SanyaCards.Monos
 
         static readonly int positionIndicatorSegments = 25;
         LineRenderer positionIndicatorLineRenderer;
+
+        static FieldInfo velocityField = typeof(PlayerVelocity).GetField("velocity", BindingFlags.NonPublic | BindingFlags.Instance);
 
         void Start()
         {
@@ -230,7 +233,6 @@ namespace SanyaCards.Monos
             player.transform.position = new Vector3(player.transform.position.x, player.transform.position.y - colliderOffset - hit.distance, player.transform.position.z);
 
             // set player velocity y to 0
-            var velocityField = typeof(PlayerVelocity).GetField("velocity", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             Vector2 currentVelocity = (Vector2)velocityField.GetValue(characterData.playerVel);
             currentVelocity.y = 0;
             velocityField.SetValue(characterData.playerVel, currentVelocity);
