@@ -87,7 +87,6 @@ namespace SanyaCards.Monos
 
             GlueMono glueMono = glue.AddComponent<GlueMono>();
             glueMono.glueMultiplier = transform.localScale.x;
-            UnityEngine.Debug.Log($"{transform.localScale.x}");
 
             Destroy(glue, 5.0f);
 

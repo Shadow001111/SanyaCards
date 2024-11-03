@@ -17,6 +17,8 @@ namespace SanyaCards.Cards
         {
             //Edits values on card itself, which are then applied to the player in `ApplyCardStats`
             UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been setup.");
+
+            gun.attackSpeed = 1.0f / (1.0f - 0.1f); // attackSpeed -10%
         }
         public override void OnAddCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
@@ -62,7 +64,7 @@ namespace SanyaCards.Cards
         }
         protected override string GetDescription()
         {
-            return "Your shots pull enemies back to where they hit";
+            return "Your shots pull enemies back to where they hit. Glue stickiness depends on bullet damage";
         }
         protected override GameObject GetCardArt()
         {
@@ -76,6 +78,20 @@ namespace SanyaCards.Cards
         {
             return new CardInfoStat[]
             {
+                new CardInfoStat
+                {
+                    positive = true,
+                    stat = "glue stickiness",
+                    amount = "+1",
+                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
+                },
+                new CardInfoStat
+                {
+                    positive = false,
+                    stat = "Attack speed",
+                    amount = "-10%",
+                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
+                }
             };
         }
         protected override CardThemeColor.CardThemeColorType GetTheme()
