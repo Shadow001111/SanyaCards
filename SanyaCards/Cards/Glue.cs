@@ -17,28 +17,39 @@ namespace SanyaCards.Cards
         {
             //Edits values on card itself, which are then applied to the player in `ApplyCardStats`
             UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been setup.");
-
-            cardInfo.allowMultiple = false;
         }
         public override void OnAddCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
             //Edits values on player when card is selected
             UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been added to player {player.playerID}.");
 
-            GameObject glueObject = new GameObject("SANYA_glueBullet");
-            glueObject.hideFlags = HideFlags.HideAndDontSave;
-            var objMono = glueObject.AddComponent<GlueBulletMono>();
-
-            var objectsToSpawnList = gun.objectsToSpawn.ToList();
-            objectsToSpawnList.Add
-            (
-                new ObjectsToSpawn
+            bool addNew = true;
+            foreach (ObjectsToSpawn objToSpawn in gun.objectsToSpawn)
+            {
+                if (objToSpawn.AddToProjectile != null && objToSpawn.AddToProjectile.name == "SANYA_glueBullet")
                 {
-                    AddToProjectile = glueObject,
-                    scaleFromDamage = 1f
+                    objToSpawn.AddToProjectile.transform.localScale += Vector3.right;
+                    addNew = false;
+                    break;
                 }
-            );
-            gun.objectsToSpawn = objectsToSpawnList.ToArray();
+            }
+            if (addNew)
+            {
+                GameObject glueObject = new GameObject("SANYA_glueBullet");
+                glueObject.hideFlags = HideFlags.HideAndDontSave;
+                GlueBulletMono objMono = glueObject.AddComponent<GlueBulletMono>();
+
+                var objectsToSpawnList = gun.objectsToSpawn.ToList();
+                objectsToSpawnList.Add
+                (
+                    new ObjectsToSpawn
+                    {
+                        AddToProjectile = glueObject,
+                        scaleFromDamage = 1f,
+                    }
+                );
+                gun.objectsToSpawn = objectsToSpawnList.ToArray();
+            }
         }
         public override void OnRemoveCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
