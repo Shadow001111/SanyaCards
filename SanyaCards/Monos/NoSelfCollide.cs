@@ -5,7 +5,8 @@ using UnityEngine;
 
 namespace SanyaCards.Monos
 {
-    public class NoSelfCollide : MonoBehaviour
+    class NoSelfCollide : MonoBehaviour
     {
+
     }
 }

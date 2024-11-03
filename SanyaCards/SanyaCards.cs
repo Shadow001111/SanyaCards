@@ -7,18 +7,13 @@ using CardChoiceSpawnUniqueCardPatch.CustomCategories;
 using ModdingUtils;
 using ModdingUtils.MonoBehaviours;
 using UnityEngine;
-//using UnboundLib.Utils.UI;
 
-// TODO: add MapsExtended dependency
 namespace SanyaCards
 {
-    // These are the mods required for our mod to work
     [BepInDependency("com.willis.rounds.unbound", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("pykess.rounds.plugins.moddingutils", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("pykess.rounds.plugins.cardchoicespawnuniquecardpatch", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("pykess.rounds.plugins.playerjumppatch", BepInDependency.DependencyFlags.HardDependency)]
-    //[BepInDependency("com.willuwontu.rounds.simulationChamber", BepInDependency.DependencyFlags.HardDependency)]
-    //[BepInDependency("com.willuwontu.rounds.evenspreadpatch", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("root.patch.regeneration", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("io.olavim.rounds.mapsextended", BepInDependency.DependencyFlags.SoftDependency)]
     

@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <Compile Remove="Cards\Pogo2.cs" />
-    <Compile Remove="Monos\SplitBulletGun.cs" />
+    <Compile Remove="Monos\SplitBullet.cs" />
     <Compile Remove="Patches\PlayerAssignerPatch.cs" />
   </ItemGroup>
 
@@ -47,14 +47,14 @@
     <Reference Include="ModdingUtils">
       <HintPath>C:\Users\ПК_Сергей\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\RoundsMods\BepInEx\plugins\Pykess-ModdingUtils\ModdingUtils.dll</HintPath>
     </Reference>
+    <Reference Include="PhotonRealtime">
+      <HintPath>bin\Debug\netstandard2.1\PhotonRealtime.dll</HintPath>
+    </Reference>
     <Reference Include="PhotonUnityNetworking">
       <HintPath>bin\Debug\netstandard2.1\PhotonUnityNetworking.dll</HintPath>
     </Reference>
     <Reference Include="PlayerJumpPatch">
       <HintPath>C:\Users\ПК_Сергей\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\SanyaMods\BepInEx\plugins\Pykess-PlayerJumpPatch\PlayerJumpPatch.dll</HintPath>
-    </Reference>
-    <Reference Include="SimulationChamber">
-      <HintPath>C:\Users\ПК_Сергей\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\SanyaMods\BepInEx\plugins\willuwontu-SimulationChamber\SimulationChamber.dll</HintPath>
     </Reference>
     <Reference Include="UnboundLib">
       <HintPath>C:\Users\ПК_Сергей\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\RoundsMods\BepInEx\plugins\willis81808-UnboundLib\UnboundLib.dll</HintPath>

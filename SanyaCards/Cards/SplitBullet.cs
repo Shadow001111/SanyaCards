@@ -1,17 +1,7 @@
-﻿using ModdingUtils.RoundsEffects;
-using System;
-using System.Collections.Generic;
+﻿using SanyaCards.Monos;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnboundLib;
 using UnboundLib.Cards;
 using UnityEngine;
-using SimulationChamber;
-using Photon.Pun;
-using System.Collections;
-using SanyaCards.Monos;
-using ModdingUtils.GameModes;
 
 
 namespace SanyaCards.Cards
@@ -34,7 +24,7 @@ namespace SanyaCards.Cards
 
             GameObject splitBulletObject = new GameObject("SANYA_splitBullet");
             splitBulletObject.hideFlags = HideFlags.HideAndDontSave;
-            var objMono = splitBulletObject.AddComponent<SplitBulletMono>();
+            var objMono = splitBulletObject.AddComponent<SplitBulletMono2>();
             objMono.player = player;
 
             var objectsToSpawnList = gun.objectsToSpawn.ToList();
