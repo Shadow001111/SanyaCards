@@ -41,9 +41,8 @@ namespace SanyaCards.Monos
                 return;
             }
 
-            // TODO: remove heal
             damageStored += damage.magnitude * absorbFactor;
-            player.data.healthHandler.Heal(damage.magnitude);
+            //player.data.healthHandler.Heal(damage.magnitude);
         }
 
         void ShootAction(GameObject projectile)
@@ -59,6 +58,7 @@ namespace SanyaCards.Monos
                 return;
             }
 
+            // TODO: bullet wont have impact sound (if initial damage isnt enough)
             ProjectileHit hit = projectile.GetComponent<ProjectileHit>();
             hit.damage += damageStored;
             damageStored = 0f;
