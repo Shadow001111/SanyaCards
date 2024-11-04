@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace SanyaCards.Cards
 {
-    class SandwichCard : CustomCard
+    class KineticBatteryCard : CustomCard
     {
         public override void SetupCard(CardInfo cardInfo, Gun gun, ApplyCardStats cardStats, CharacterStatModifiers statModifiers, Block block)
         {
@@ -19,17 +19,15 @@ namespace SanyaCards.Cards
             UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been setup.");
 
             cardInfo.allowMultiple = false;
-            block.cdAdd = 0.25f;
-            statModifiers.health = (1.0f + 0.5f);
         }
         public override void OnAddCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
             //Edits values on player when card is selected
             UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been added to player {player.playerID}.");
 
-            var child = new GameObject("A_SANYA_Sandwich");
+            var child = new GameObject("A_SANYA_KineticBattery");
             child.transform.SetParent(player.transform);
-            child.AddComponent<SandwichMono>();
+            child.AddComponent<KineticBatteryMono>();
             characterStats.objectsAddedToPlayer.Add(child);
         }
         public override void OnRemoveCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
@@ -39,11 +37,11 @@ namespace SanyaCards.Cards
         }
         protected override string GetTitle()
         {
-            return "Sandwich";
+            return "Kinetic battery";
         }
         protected override string GetDescription()
         {
-            return $"Eating heals {SandwichMono.heal} hp. While eating you move slower.";
+            return $"Converting {(int)(KineticBatteryMono.absorbFactor * 100f)}% of enemy's damage into raw energy for your next attack. Your pain becomes their problem";
         }
         protected override GameObject GetCardArt()
         {
@@ -57,46 +55,11 @@ namespace SanyaCards.Cards
         {
             return new CardInfoStat[]
             {
-                new CardInfoStat()
-                {
-                    positive = true,
-                    stat = "Health",
-                    amount = "+50%",
-                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
-                },
-                new CardInfoStat()
-                {
-                    positive = false,
-                    stat = "Ability cooldown",
-                    amount = (int)SandwichMono.abilityCooldown + "s",
-                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
-                },
-                new CardInfoStat()
-                {
-                    positive = false,
-                    stat = "Eating time",
-                    amount = (int)SandwichMono.abilityDuration + "s",
-                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
-                },
-                new CardInfoStat()
-                {
-                    positive = false,
-                    stat = "Movement speed when eating",
-                    amount = (int)(100.0f / SandwichMono.abilitySpeedDivider) + "%",
-                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
-                },
-                new CardInfoStat()
-                {
-                    positive = false,
-                    stat = "Block cooldown",
-                    amount = "+0.25s",
-                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
-                }
             };
         }
         protected override CardThemeColor.CardThemeColorType GetTheme()
         {
-            return CardThemeColor.CardThemeColorType.PoisonGreen;
+            return CardThemeColor.CardThemeColorType.MagicPink;
         }
         public override string GetModName()
         {

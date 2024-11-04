@@ -1,5 +1,4 @@
-﻿using SanyaCards.Monos;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,26 +10,22 @@ using UnityEngine;
 
 namespace SanyaCards.Cards
 {
-    class SandwichCard : CustomCard
+    class KickBackCard : CustomCard
     {
         public override void SetupCard(CardInfo cardInfo, Gun gun, ApplyCardStats cardStats, CharacterStatModifiers statModifiers, Block block)
         {
             //Edits values on card itself, which are then applied to the player in `ApplyCardStats`
             UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been setup.");
 
-            cardInfo.allowMultiple = false;
-            block.cdAdd = 0.25f;
-            statModifiers.health = (1.0f + 0.5f);
+            gun.bodyRecoil = 100;
+            gun.knockback = 1f + 0.5f;
+            gun.damage = 1f + 0.25f;
+            gun.reloadTimeAdd = 0.25f;
         }
         public override void OnAddCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
             //Edits values on player when card is selected
             UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been added to player {player.playerID}.");
-
-            var child = new GameObject("A_SANYA_Sandwich");
-            child.transform.SetParent(player.transform);
-            child.AddComponent<SandwichMono>();
-            characterStats.objectsAddedToPlayer.Add(child);
         }
         public override void OnRemoveCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
@@ -39,11 +34,11 @@ namespace SanyaCards.Cards
         }
         protected override string GetTitle()
         {
-            return "Sandwich";
+            return "Kick Back";
         }
         protected override string GetDescription()
         {
-            return $"Eating heals {SandwichMono.heal} hp. While eating you move slower.";
+            return "Feel the force with every shot. Increased recoil pushes you back, but enemies feel the impact even harder";
         }
         protected override GameObject GetCardArt()
         {
@@ -51,7 +46,7 @@ namespace SanyaCards.Cards
         }
         protected override CardInfo.Rarity GetRarity()
         {
-            return CardInfo.Rarity.Rare;
+            return CardInfo.Rarity.Uncommon;
         }
         protected override CardInfoStat[] GetStats()
         {
@@ -60,35 +55,28 @@ namespace SanyaCards.Cards
                 new CardInfoStat()
                 {
                     positive = true,
-                    stat = "Health",
+                    stat = "Damage",
+                    amount = "+25%",
+                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
+                },
+                new CardInfoStat()
+                {
+                    positive = true,
+                    stat = "Knockback",
                     amount = "+50%",
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 },
                 new CardInfoStat()
                 {
                     positive = false,
-                    stat = "Ability cooldown",
-                    amount = (int)SandwichMono.abilityCooldown + "s",
+                    stat = "Recoil",
+                    amount = "+100",
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 },
                 new CardInfoStat()
                 {
                     positive = false,
-                    stat = "Eating time",
-                    amount = (int)SandwichMono.abilityDuration + "s",
-                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
-                },
-                new CardInfoStat()
-                {
-                    positive = false,
-                    stat = "Movement speed when eating",
-                    amount = (int)(100.0f / SandwichMono.abilitySpeedDivider) + "%",
-                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
-                },
-                new CardInfoStat()
-                {
-                    positive = false,
-                    stat = "Block cooldown",
+                    stat = "Reload time",
                     amount = "+0.25s",
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 }
@@ -96,7 +84,7 @@ namespace SanyaCards.Cards
         }
         protected override CardThemeColor.CardThemeColorType GetTheme()
         {
-            return CardThemeColor.CardThemeColorType.PoisonGreen;
+            return CardThemeColor.CardThemeColorType.FirepowerYellow;
         }
         public override string GetModName()
         {

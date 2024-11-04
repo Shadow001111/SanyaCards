@@ -14,16 +14,17 @@ namespace SanyaCards
     [BepInDependency("pykess.rounds.plugins.moddingutils", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("pykess.rounds.plugins.cardchoicespawnuniquecardpatch", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("pykess.rounds.plugins.playerjumppatch", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInDependency("root.patch.regeneration", BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInDependency("io.olavim.rounds.mapsextended", BepInDependency.DependencyFlags.SoftDependency)]
-    
+    //[BepInDependency("root.patch.regeneration", BepInDependency.DependencyFlags.SoftDependency)]
+    [BepInDependency("io.olavim.rounds.mapsextended", BepInDependency.DependencyFlags.HardDependency)] // make it soft dependency and make it, so stomp can work without it
+    [BepInDependency("Root.Gun.bodyRecoil.Patch", BepInDependency.DependencyFlags.HardDependency)]
+
     [BepInPlugin(ModId, ModName, Version)]
     [BepInProcess("Rounds.exe")]
     public class SanyaCards : BaseUnityPlugin
     {
         private const string ModId = "com.Shadow.SanyaCards";
         private const string ModName = "SanyaCards";
-        public const string Version = "0.7.1";
+        public const string Version = "0.8.0";
         public const string ModInitials = "SANYA";
 
         public static SanyaCards instance { get; private set; }
@@ -56,6 +57,8 @@ namespace SanyaCards
             CustomCard.BuildCard<MagneticBulletsCard>();
             CustomCard.BuildCard<ExplosionResistanceCard>();
             CustomCard.BuildCard<GlueCard>();
+            CustomCard.BuildCard<KickBackCard>();
+            CustomCard.BuildCard<KineticBatteryCard>();
 
             ModdingUtils.Utils.Cards.instance.AddCardValidationFunction(ExplosionResistanceCard.Validation);
             ModdingUtils.Utils.Cards.instance.AddCardValidationFunction(BouncesToDamageCard.Validation);

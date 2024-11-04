@@ -26,7 +26,7 @@ namespace SanyaCards.Cards
             //Edits values on player when card is selected
             UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been added to player {player.playerID}.");
 
-            var child = new GameObject("A_Flee");
+            var child = new GameObject("A_SANYA_Flee");
             child.transform.SetParent(player.transform);
             child.AddComponent<FleeMono>();
             characterStats.objectsAddedToPlayer.Add(child);
