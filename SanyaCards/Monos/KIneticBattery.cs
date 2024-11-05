@@ -8,7 +8,7 @@ namespace SanyaCards.Monos
 {
     class KineticBatteryMono : MonoBehaviour
     {
-        public static readonly float absorbFactor = 0.5f;
+        public static readonly float absorbFactor = 0.75f;
 
         Player player;
         Gun gun;
