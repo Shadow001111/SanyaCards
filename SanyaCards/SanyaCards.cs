@@ -62,6 +62,7 @@ namespace SanyaCards
 
             ModdingUtils.Utils.Cards.instance.AddCardValidationFunction(ExplosionResistanceCard.Validation);
             ModdingUtils.Utils.Cards.instance.AddCardValidationFunction(BouncesToDamageCard.Validation);
+            ModdingUtils.Utils.Cards.instance.AddCardValidationFunction(TeamSpiritCard.Validation);
         }
 
         //void NewGUI(GameObject menu)

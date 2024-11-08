@@ -29,17 +29,6 @@ namespace SanyaCards.Cards
             child.transform.SetParent(player.transform);
             child.AddComponent<TeamSpiritMono>();
             characterStats.objectsAddedToPlayer.Add(child);
-
-            foreach (Player other in PlayerManager.instance.players)
-            {
-                if (other.playerID == player.playerID)
-                {
-                    continue;
-                }
-
-                other.data.weaponHandler.gun.damage = 0f;
-                other.GetComponent<CharacterStatModifiers>().movementSpeed = 0f;
-            }
         }
         public override void OnRemoveCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
@@ -82,6 +71,19 @@ namespace SanyaCards.Cards
         public override string GetModName()
         {
             return SanyaCards.ModInitials;
+        }
+
+        public static bool Validation(Player player, CardInfo card)
+        {
+            if (card.name != "__SANYA__Team spirit")
+            {
+                return true;
+            }
+            if (PlayerManager.instance.GetPlayersInTeam(player.teamID).Length > 1)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
