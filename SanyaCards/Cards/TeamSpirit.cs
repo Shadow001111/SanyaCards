@@ -66,7 +66,7 @@ namespace SanyaCards.Cards
                 {
                     positive = true,
                     stat = "Damage",
-                    amount = $"+{(int)((TeamSpiritMono.damageEffect - 1f) * 100f)}",
+                    amount = $"+{(int)((TeamSpiritMono.damageEffect - 1f) * 100f)}%",
                     simepleAmount = CardInfoStat.SimpleAmount.notAssigned
                 }
             };
