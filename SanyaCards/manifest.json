@@ -1,14 +1,15 @@
 {
   "name": "SanyaCards",
-  "version_number": "0.8.1",
+  "version_number": "0.9.0",
   "website_url": "https://github.com/Shadow001111/SanyaCards",
-  "description": "+16 cards",
+  "description": "+17 cards",
   "dependencies": [
     "BepInEx-BepInExPack_ROUNDS-5.4.1901",
     "Pykess-ModdingUtils-0.4.8",
     "Pykess-CardChoiceSpawnUniqueCardPatch-0.1.10",
     "Pykess-PlayerJumpPatch-0.0.2",
     "olavim-MapsExtended-1.4.2",
-    "Root-GunBodyRecoilPatch-0.1.0"
+    "Root-GunBodyRecoilPatch-0.1.0",
+    "Root-RegenerationPatch-0.0.0"
   ]
 }

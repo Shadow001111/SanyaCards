@@ -128,7 +128,7 @@ namespace SanyaCards.Monos
             newGun.evenSpread = 0.0f;
             newGun.damage = projectileHitComponent.damage / 55.0f / bulletsAfterSplitCount * 2.0f;
             newGun.bulletDamageMultiplier = projectileHitComponent.dealDamageMultiplierr;
-            newGun.damageAfterDistanceMultiplier = 1.0f;
+            newGun.damageAfterDistanceMultiplier = 1.5f;
             newGun.projectileSpeed = 0.5f;
             newGun.projectielSimulatonSpeed = 1.0f;
             newGun.reflects = 0;

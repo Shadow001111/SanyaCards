@@ -59,6 +59,9 @@
     <Reference Include="PlayerJumpPatch">
       <HintPath>C:\Users\ПК_Сергей\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\SanyaMods\BepInEx\plugins\Pykess-PlayerJumpPatch\PlayerJumpPatch.dll</HintPath>
     </Reference>
+    <Reference Include="Regeneration Patch">
+      <HintPath>C:\Users\ПК_Сергей\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\SanyaMods\BepInEx\plugins\Root-RegenerationPatch\Regeneration Patch.dll</HintPath>
+    </Reference>
     <Reference Include="UnboundLib">
       <HintPath>C:\Users\ПК_Сергей\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\RoundsMods\BepInEx\plugins\willis81808-UnboundLib\UnboundLib.dll</HintPath>
     </Reference>

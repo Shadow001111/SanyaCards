@@ -14,9 +14,9 @@ namespace SanyaCards
     [BepInDependency("pykess.rounds.plugins.moddingutils", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("pykess.rounds.plugins.cardchoicespawnuniquecardpatch", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("pykess.rounds.plugins.playerjumppatch", BepInDependency.DependencyFlags.HardDependency)]
-    //[BepInDependency("root.patch.regeneration", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("io.olavim.rounds.mapsextended", BepInDependency.DependencyFlags.HardDependency)] // make it soft dependency and make it, so stomp can work without it
     [BepInDependency("Root.Gun.bodyRecoil.Patch", BepInDependency.DependencyFlags.HardDependency)]
+    [BepInDependency("root.patch.regeneration", BepInDependency.DependencyFlags.HardDependency)]
 
     [BepInPlugin(ModId, ModName, Version)]
     [BepInProcess("Rounds.exe")]
@@ -24,14 +24,13 @@ namespace SanyaCards
     {
         private const string ModId = "com.Shadow.SanyaCards";
         private const string ModName = "SanyaCards";
-        public const string Version = "0.8.1";
+        public const string Version = "0.9.0";
         public const string ModInitials = "SANYA";
 
         public static SanyaCards instance { get; private set; }
 
         void Awake()
         {
-            // Use this to call any harmony patch files your mod may have
             var harmony = new Harmony(ModId);
             harmony.PatchAll();
         }
@@ -59,6 +58,7 @@ namespace SanyaCards
             CustomCard.BuildCard<GlueCard>();
             CustomCard.BuildCard<KickBackCard>();
             CustomCard.BuildCard<KineticBatteryCard>();
+            CustomCard.BuildCard<TeamSpiritCard>();
 
             ModdingUtils.Utils.Cards.instance.AddCardValidationFunction(ExplosionResistanceCard.Validation);
             ModdingUtils.Utils.Cards.instance.AddCardValidationFunction(BouncesToDamageCard.Validation);

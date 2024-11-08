@@ -15,7 +15,7 @@ namespace SanyaCards.Monos
         CharacterStatModifiers stats;
         Player? target;
 
-        bool isOn = false;
+        bool isActive = false;
 
         void Start()
         {
@@ -53,18 +53,18 @@ namespace SanyaCards.Monos
 
         void turnOn()
         {
-            if (!isOn)
+            if (!isActive)
             {
-                isOn = true;
+                isActive = true;
                 stats.movementSpeed *= (1.0f + speedPercentBonus * 0.01f);
             }
         }
 
         void turnOff()
         {
-            if (isOn)
+            if (isActive)
             {
-                isOn = false;
+                isActive = false;
                 stats.movementSpeed /= (1.0f + speedPercentBonus * 0.01f);
             }
         }
