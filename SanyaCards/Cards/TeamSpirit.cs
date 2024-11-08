@@ -41,7 +41,7 @@ namespace SanyaCards.Cards
         }
         protected override string GetDescription()
         {
-            return "Give buffs for both teammates within close range";
+            return "Give buffs for both teammates within close range(stacks with other teammates TeamSpirit). When active:";
         }
         protected override GameObject GetCardArt()
         {
@@ -55,13 +55,20 @@ namespace SanyaCards.Cards
         {
             return new CardInfoStat[]
             {
-                //new CardInfoStat()
-                //{
-                //    positive = true,
-                //    stat = "Effect",
-                //    amount = "No",
-                //    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
-                //}
+                new CardInfoStat()
+                {
+                    positive = true,
+                    stat = "Regeneration",
+                    amount = $"+{TeamSpiritMono.regenerationEffect}",
+                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
+                },
+                new CardInfoStat()
+                {
+                    positive = true,
+                    stat = "Damage",
+                    amount = $"+{(int)((TeamSpiritMono.damageEffect - 1f) * 100f)}",
+                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
+                }
             };
         }
         protected override CardThemeColor.CardThemeColorType GetTheme()
