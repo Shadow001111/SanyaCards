@@ -1,5 +1,8 @@
-﻿using Photon.Pun.Simple;
+﻿using ModdingUtils.Extensions;
+using ModdingUtils.GameModes;
+using Photon.Pun.Simple;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -23,11 +26,35 @@ namespace SanyaCards.Monos
             gun.ShootPojectileAction += ShootAction;
         }
 
+        public void ResetDamageStored()
+        {
+            // can be called 2 times if player did lose
+            damageStored = 0f;
+        }
+
+        internal static IEnumerator OnPointEnd()
+        {
+            using (List<Player>.Enumerator enumerator = PlayerManager.instance.players.GetEnumerator())
+            {
+                while (enumerator.MoveNext())
+                {
+                    Player player = enumerator.Current;
+                    KineticBatteryMono? mono = player.GetComponentInChildren<KineticBatteryMono>();
+                    if (mono != null)
+                    {
+                        mono.ResetDamageStored();
+                    }
+                }
+                yield break;
+            }
+        }
+
         void OnDisable()
         {
+            // this thing exists, just for Sandbox
             if (player.data.dead) // if not revive
             {
-                damageStored = 0f;
+                ResetDamageStored();
             }
         }
 

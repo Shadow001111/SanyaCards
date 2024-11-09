@@ -7,6 +7,9 @@ using CardChoiceSpawnUniqueCardPatch.CustomCategories;
 using ModdingUtils;
 using ModdingUtils.MonoBehaviours;
 using UnityEngine;
+using UnboundLib.GameModes;
+using ModdingUtils.GameModes;
+using SanyaCards.Monos;
 
 namespace SanyaCards
 {
@@ -63,6 +66,9 @@ namespace SanyaCards
             ModdingUtils.Utils.Cards.instance.AddCardValidationFunction(ExplosionResistanceCard.Validation);
             ModdingUtils.Utils.Cards.instance.AddCardValidationFunction(BouncesToDamageCard.Validation);
             ModdingUtils.Utils.Cards.instance.AddCardValidationFunction(TeamSpiritCard.Validation);
+
+            GameModeManager.AddHook("PointEnd", (IGameModeHandler gm) => KineticBatteryMono.OnPointEnd());
+            GameModeManager.AddHook("PointEnd", (IGameModeHandler gm) => GlueBulletMono.OnPointEnd());
         }
 
         //void NewGUI(GameObject menu)

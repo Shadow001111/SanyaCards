@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
@@ -37,8 +38,7 @@ namespace SanyaCards.Monos
 
             void OnDisable()
             {
-                Destroy(lineRenderer);
-                Destroy(this);
+                Destroy(gameObject);
             }
 
             void FixedUpdate()
@@ -91,6 +91,16 @@ namespace SanyaCards.Monos
             Destroy(glue, 5.0f);
 
             return HasToReturn.canContinue;
+        }
+
+        internal static IEnumerator OnPointEnd()
+        {
+            GlueMono[] glueMonos = FindObjectsOfType<GlueMono>();
+            foreach (GlueMono glueMono in glueMonos)
+            {
+                Destroy(glueMono.gameObject);
+            }
+            yield break;
         }
     }
 }
