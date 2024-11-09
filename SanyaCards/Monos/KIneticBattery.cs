@@ -25,7 +25,10 @@ namespace SanyaCards.Monos
 
         void OnDisable()
         {
-            damageStored = 0f;
+            if (player.data.dead) // if not revive
+            {
+                damageStored = 0f;
+            }
         }
 
         void OnDestroy()
