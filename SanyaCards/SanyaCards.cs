@@ -62,6 +62,7 @@ namespace SanyaCards
             CustomCard.BuildCard<KickBackCard>();
             CustomCard.BuildCard<KineticBatteryCard>();
             CustomCard.BuildCard<TeamSpiritCard>();
+            CustomCard.BuildCard<RewindCard>();
 
             ModdingUtils.Utils.Cards.instance.AddCardValidationFunction(ExplosionResistanceCard.Validation);
             ModdingUtils.Utils.Cards.instance.AddCardValidationFunction(BouncesToDamageCard.Validation);
