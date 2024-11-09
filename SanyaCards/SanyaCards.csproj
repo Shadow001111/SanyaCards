@@ -77,6 +77,9 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>bin\Debug\netstandard2.1\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.ParticleSystemModule">
+      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\ROUNDS\ROUNDS_Data\Managed\UnityEngine.ParticleSystemModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.Physics2DModule">
       <HintPath>bin\Release\netstandard2.1\UnityEngine.Physics2DModule.dll</HintPath>
     </Reference>

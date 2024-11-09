@@ -19,7 +19,7 @@ namespace SanyaCards.Monos
 
             LineRenderer lineRenderer;
 
-            void Start()
+            void Awake()
             {
                 target = transform.parent.GetComponent<Player>();
 
