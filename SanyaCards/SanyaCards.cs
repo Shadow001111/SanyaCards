@@ -46,7 +46,6 @@ namespace SanyaCards
 
             CustomCard.BuildCard<NukeCard>();
             CustomCard.BuildCard<ScoutTF2Card>();
-            //CustomCard.BuildCard<SplitBulletCard>(); // BROKEN
             CustomCard.BuildCard<PrecisionStrikeCard>();
             CustomCard.BuildCard<SprayAndPrayCard>();
             CustomCard.BuildCard<AmmoBoostCard>();
@@ -63,6 +62,8 @@ namespace SanyaCards
             CustomCard.BuildCard<KineticBatteryCard>();
             CustomCard.BuildCard<TeamSpiritCard>();
             CustomCard.BuildCard<RewindCard>();
+
+            //CustomCard.BuildCard<SplitBulletCard>(); // BROKEN
 
             ModdingUtils.Utils.Cards.instance.AddCardValidationFunction(ExplosionResistanceCard.Validation);
             ModdingUtils.Utils.Cards.instance.AddCardValidationFunction(BouncesToDamageCard.Validation);

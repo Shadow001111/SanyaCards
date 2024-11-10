@@ -8,7 +8,7 @@ using System;
 
 // Thanks to Pykess
 
-namespace PCE.MonoBehaviours
+namespace SanyaCards.Monos
 {
     // Token: 0x02000032 RID: 50
     public class SpawnSplitBulletsEffect : MonoBehaviour
@@ -17,16 +17,49 @@ namespace PCE.MonoBehaviours
         private void Awake()
         {
             this.player = base.gameObject.GetComponent<Player>();
+
+            foreach (var obj in this.gunToShootFrom.objectsToSpawn)
+            {
+                if (obj.AddToProjectile != null)
+                {
+                    if (obj.AddToProjectile.GetComponent<NoSelfCollide>())
+                    {
+                        UnityEngine.Debug.Log("Found NoSelfCollide Awake");
+                        break;
+                    }
+                }
+            }
         }
 
         // Token: 0x060000F3 RID: 243 RVA: 0x000070E3 File Offset: 0x000052E3
         private void Start()
         {
-            
+            foreach (var obj in this.gunToShootFrom.objectsToSpawn)
+            {
+                if (obj.AddToProjectile != null)
+                {
+                    if (obj.AddToProjectile.GetComponent<NoSelfCollide>())
+                    {
+                        UnityEngine.Debug.Log("Found NoSelfCollide Start");
+                        break;
+                    }
+                }
+            }
         }
 
         void Update()
         {
+            foreach (var obj in this.gunToShootFrom.objectsToSpawn)
+            {
+                if (obj.AddToProjectile != null)
+                {
+                    if (obj.AddToProjectile.GetComponent<NoSelfCollide>())
+                    {
+                        UnityEngine.Debug.Log("Found NoSelfCollide Update");
+                        break;
+                    }
+                }
+            }
             this.Shoot();
             Destroy(this);
         }
@@ -49,7 +82,7 @@ namespace PCE.MonoBehaviours
             int num = this.gunToShootFrom.numberOfProjectiles;
             for (int i = 0; i < this.gunToShootFrom.projectiles.Length; i++)
             {
-                for (int j = 0; j < num; j++)
+                for (int j = 0; j < this.gunToShootFrom.numberOfProjectiles; j++)
                 {
                     Vector3 vector = this.directionsToShoot[this.numShot % this.directionsToShoot.Count];
                     if (this.gunToShootFrom.spread != 0f)
@@ -62,6 +95,7 @@ namespace PCE.MonoBehaviours
                     if ((bool)typeof(Gun).InvokeMember("CheckIsMine", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.InvokeMethod, null, this.gunToShootFrom, new object[0]))
                     {
                         GameObject gameObject = PhotonNetwork.Instantiate(this.gunToShootFrom.projectiles[i].objectToSpawn.gameObject.name, positionToShootFrom, Quaternion.LookRotation(vector), 0, null);
+
                         if (PhotonNetwork.OfflineMode)
                         {
                             this.RPCA_Shoot(gameObject.GetComponent<PhotonView>().ViewID, num, 1f, UnityEngine.Random.Range(0f, 1f));
@@ -87,8 +121,26 @@ namespace PCE.MonoBehaviours
         private void RPCA_Shoot(int bulletViewID, int numProj, float dmgM, float seed)
         {
             GameObject gameObject = PhotonView.Find(bulletViewID).gameObject;
+
+            foreach (var obj in this.gunToShootFrom.objectsToSpawn)
+            {
+                if (obj.AddToProjectile != null)
+                {
+                    if (obj.AddToProjectile.GetComponent<NoSelfCollide>())
+                    {
+                        UnityEngine.Debug.Log("Found NoSelfCollide 5");
+                        break;
+                    }
+                }
+            }
+
             this.gunToShootFrom.BulletInit(gameObject, numProj, dmgM, seed, true);
             this.numShot++;
+
+            if (gameObject.GetComponentInChildren<NoSelfCollide>())
+            {
+                UnityEngine.Debug.Log("Found NoSelfCollide 6");
+            }
         }
 
         // Token: 0x060000F9 RID: 249 RVA: 0x000073D4 File Offset: 0x000055D4
@@ -110,6 +162,18 @@ namespace PCE.MonoBehaviours
             }
             this.gunToShootFrom = this.newWeaponsBase.GetComponent<Gun>();
             SpawnSplitBulletsEffect.CopyGunStats(gun, this.gunToShootFrom);
+
+            foreach (var obj in this.gunToShootFrom.objectsToSpawn)
+            {
+                if (obj.AddToProjectile != null)
+                {
+                    if (obj.AddToProjectile.GetComponent<NoSelfCollide>())
+                    {
+                        UnityEngine.Debug.Log("Found NoSelfCollide 4");
+                        break;
+                    }
+                }
+            }
         }
 
         // Token: 0x060000FA RID: 250 RVA: 0x000074C0 File Offset: 0x000056C0
@@ -233,6 +297,30 @@ namespace PCE.MonoBehaviours
             Traverse.Create(copyToGun).Field("gunID").SetValue((int)Traverse.Create(copyFromGun).Field("gunID").GetValue());
             Traverse.Create(copyToGun).Field("spreadOfLastBullet").SetValue((float)Traverse.Create(copyFromGun).Field("spreadOfLastBullet").GetValue());
             Traverse.Create(copyToGun).Field("forceShootDir").SetValue((Vector3)Traverse.Create(copyFromGun).Field("forceShootDir").GetValue());
+
+            foreach (var obj in copyFromGun.objectsToSpawn)
+            {
+                if (obj.AddToProjectile != null)
+                {
+                    if (obj.AddToProjectile.GetComponent<NoSelfCollide>())
+                    {
+                        UnityEngine.Debug.Log("Found NoSelfCollide 2");
+                        break;
+                    }
+                }
+            }
+
+            foreach (var obj in copyToGun.objectsToSpawn)
+            {
+                if (obj.AddToProjectile != null)
+                {
+                    if (obj.AddToProjectile.GetComponent<NoSelfCollide>())
+                    {
+                        UnityEngine.Debug.Log("Found NoSelfCollide 3");
+                        break;
+                    }
+                }
+            }
         }
 
         // Token: 0x06000103 RID: 259 RVA: 0x00007952 File Offset: 0x00005B52
@@ -251,7 +339,7 @@ namespace PCE.MonoBehaviours
         private int numShot;
 
         // Token: 0x0400009C RID: 156
-        private Gun gunToShootFrom;
+        public Gun gunToShootFrom;
 
         // Token: 0x0400009D RID: 157
         private List<Vector3> directionsToShoot = new List<Vector3>();

@@ -1,5 +1,4 @@
-﻿using PCE.MonoBehaviours;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -64,6 +63,8 @@ namespace SanyaCards.Monos
             {
                 spawnBulletsEffect = player.gameObject.AddComponent<SpawnSplitBulletsEffect>();
             }
+
+            UnityEngine.Debug.Log("\nSHOOT:");
 
             SpawnSplitBulletsEffect.CopyGunStats(gun, newGun);
 
@@ -151,6 +152,18 @@ namespace SanyaCards.Monos
             //newGun.projectiles = (from e in Enumerable.Range(0, newGun.numberOfProjectiles)
             //                      from x in newGun.projectiles
             //                      select x).ToList<ProjectilesToSpawn>().Take(newGun.numberOfProjectiles).ToArray<ProjectilesToSpawn>();
+
+            foreach (var obj in newGun.objectsToSpawn)
+            {
+                if (obj.AddToProjectile != null)
+                {
+                    if (obj.AddToProjectile.GetComponent<NoSelfCollide>())
+                    {
+                        UnityEngine.Debug.Log("Found NoSelfCollide 1");
+                        break;
+                    }
+                }
+            }
 
             spawnBulletsEffect.SetGun(newGun);
         }

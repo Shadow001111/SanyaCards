@@ -32,8 +32,8 @@ namespace SanyaCards.Monos
             player = GetComponentInParent<Player>();
             player.data.block.BlockAction += OnBlock;
 
-            stats = player.GetComponent<CharacterStatModifiers>();
-            healthHandler = player.GetComponent<HealthHandler>();
+            stats = player.data.stats;
+            healthHandler = player.data.healthHandler;
 
             playerAudioSource = gameObject.AddComponent<AudioSource>();
         }
