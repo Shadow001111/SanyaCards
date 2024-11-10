@@ -46,7 +46,7 @@ namespace SanyaCards.Monos
             player = GetComponentInParent<Player>();
             player.data.block.BlockAction += OnBlock;
 
-            characterData = player.GetComponent<CharacterData>();
+            characterData = player.data;
             collider = player.GetComponent<CircleCollider2D>();
 
             var objectsToSpawn = ((GameObject)Resources.Load("0 cards/Explosive bullet")).GetComponent<Gun>().objectsToSpawn[0];
@@ -133,11 +133,7 @@ namespace SanyaCards.Monos
             RaycastHit2D hit = Physics2D.Raycast(rayPosition, Vector2.down, 100.0f, obstacleLayers);
 
             distance = hit.distance;
-            if (hit.collider == null || hit.collider.gameObject == null)
-            {
-                distance = -1.0f;
-            }
-            else if (hit.distance >= GetHeightToBottomEdge(rayPosition))
+            if (hit.collider == null || hit.collider.gameObject == null || hit.distance >= GetHeightToBottomEdge(rayPosition))
             {
                 distance = -1.0f;
             }
