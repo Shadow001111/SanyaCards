@@ -26,7 +26,7 @@ namespace SanyaCards.Monos
             gun.ShootPojectileAction += ShootAction;
         }
 
-        public void ResetDamageStored()
+        void ResetDamageStored()
         {
             // can be called 2 times if player did lose
             damageStored = 0f;
