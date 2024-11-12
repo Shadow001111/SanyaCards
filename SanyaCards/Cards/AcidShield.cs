@@ -17,6 +17,8 @@ namespace SanyaCards.Cards
         {
             //Edits values on card itself, which are then applied to the player in `ApplyCardStats`
             UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been setup.");
+
+            cardInfo.allowMultiple = false;
         }
         public override void OnAddCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
@@ -39,7 +41,7 @@ namespace SanyaCards.Cards
         }
         protected override string GetDescription()
         {
-            return "";
+            return "Creates field, that reduces bullets damage and speed";
         }
         protected override GameObject GetCardArt()
         {
@@ -53,13 +55,20 @@ namespace SanyaCards.Cards
         {
             return new CardInfoStat[]
             {
-                //new CardInfoStat()
-                //{
-                //    positive = true,
-                //    stat = "Effect",
-                //    amount = "No",
-                //    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
-                //}
+                new CardInfoStat()
+                {
+                    positive = false,
+                    stat = "Ability cooldown",
+                    amount = $"{AcidShieldMono.abilityCooldown}s",
+                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
+                },
+                new CardInfoStat()
+                {
+                    positive = true,
+                    stat = "Ability duration",
+                    amount = $"{AcidShieldMono.abilityDuration}s",
+                    simepleAmount = CardInfoStat.SimpleAmount.notAssigned
+                }
             };
         }
         protected override CardThemeColor.CardThemeColorType GetTheme()
