@@ -62,10 +62,9 @@ namespace SanyaCards
             CustomCard.BuildCard<KineticBatteryCard>();
             CustomCard.BuildCard<TeamSpiritCard>();
             CustomCard.BuildCard<RewindCard>();
-
-            CustomCard.BuildCard<SoftBodyCard>();
             CustomCard.BuildCard<HealthTaxesCard>();
-            CustomCard.BuildCard<AcidShieldCard>(); // Bullets arent shrinking
+
+            //CustomCard.BuildCard<AcidShieldCard>(); // Bullets arent shrinking
             //CustomCard.BuildCard<SplitBulletCard>(); // BROKEN
 
             ModdingUtils.Utils.Cards.instance.AddCardValidationFunction(ExplosionResistanceCard.Validation);
