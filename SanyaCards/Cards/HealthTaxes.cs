@@ -41,7 +41,7 @@ namespace SanyaCards.Cards
         }
         protected override string GetDescription()
         {
-            return "Your enemies lose health when they are shooting";
+            return "Your enemies lose health when they are shooting. Damage reduction is 5.45% of bullet damage";
         }
         protected override GameObject GetCardArt()
         {
