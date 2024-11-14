@@ -17,17 +17,14 @@ namespace SanyaCards.Monos
         //ParticleSystem speedBoostParticle;
 
         Player player;
-        CharacterStatModifiers stats;
-        Player? target;
 
         bool isActive = false;
 
         void Start()
         {
             player = GetComponentInParent<Player>();
-            stats = player.GetComponent<CharacterStatModifiers>();
             
-            //TasteOfBlood tasteOfBloodComponent = addObjectToPlayer.GetComponent<TasteOfBlood>();
+            //TasteOfBlood tasteOfBloodComponent = addObjectToPlayer.GetComponentInChildren<TasteOfBlood>();
             //if (tasteOfBloodComponent == null)
             //{
             //    UnityEngine.Debug.Log("tasteOfBloodComponent is null");
@@ -43,22 +40,34 @@ namespace SanyaCards.Monos
         void OnDisable()
         {
             turnOff();
-            target = null;
         }
 
-        void Update()
+        void FixedUpdate()
         {
-            // Find target
-            target = PlayerManager.instance.GetClosestPlayerInOtherTeam(player.transform.position, player.teamID, true);
-            if (target != null &&
-                (player.data.input.direction == Vector3.zero || 
-                Vector2.Angle(target.transform.position - player.transform.position, -player.data.input.direction) > 70f))
+            bool targetFound = false;
+            if (player.data.input.direction != Vector3.zero)
             {
-                target = null;
+                foreach (Player other in PlayerManager.instance.players)
+                {
+                    if (other.teamID == player.teamID)
+                    {
+                        continue;
+                    }
+                    if (Vector2.Angle(other.transform.position - player.transform.position, -player.data.input.direction) > 70f)
+                    {
+                        continue;
+                    }
+                    if (!PlayerManager.instance.CanSeePlayer(player.transform.position, other).canSee)
+                    {
+                        continue;
+                    }
+
+                    targetFound = true;
+                    break;
+                }
             }
 
-
-            if (target != null)
+            if (targetFound)
             {
                 turnOn();
             }
@@ -73,7 +82,7 @@ namespace SanyaCards.Monos
             if (!isActive)
             {
                 isActive = true;
-                stats.movementSpeed *= (1.0f + speedPercentBonus * 0.01f);
+                player.data.stats.movementSpeed *= (1.0f + speedPercentBonus * 0.01f);
                 //speedBoostParticle.Play();
             }
         }
@@ -83,7 +92,7 @@ namespace SanyaCards.Monos
             if (isActive)
             {
                 isActive = false;
-                stats.movementSpeed /= (1.0f + speedPercentBonus * 0.01f);
+                player.data.stats.movementSpeed /= (1.0f + speedPercentBonus * 0.01f);
                 //speedBoostParticle.Stop();
             }
         }
