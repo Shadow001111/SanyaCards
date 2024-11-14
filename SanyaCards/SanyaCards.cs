@@ -63,6 +63,8 @@ namespace SanyaCards
             CustomCard.BuildCard<TeamSpiritCard>();
             CustomCard.BuildCard<RewindCard>();
 
+            CustomCard.BuildCard<SoftBodyCard>();
+            CustomCard.BuildCard<HealthTaxesCard>();
             CustomCard.BuildCard<AcidShieldCard>(); // Bullets arent shrinking
             //CustomCard.BuildCard<SplitBulletCard>(); // BROKEN
 
