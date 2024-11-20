@@ -35,13 +35,14 @@ namespace SanyaCards.Monos
 
             // damage
             projectile.damage /= dmgFactor;
-            ScaleTrailFromDamage? scaleTrailFromDamage = projectile.gameObject.GetComponent<ScaleTrailFromDamage>();
-            if (scaleTrailFromDamage == null)
-            {
-                projectile.gameObject.AddComponent<TrailRenderer>();
-                scaleTrailFromDamage = projectile.gameObject.AddComponent<ScaleTrailFromDamage>();
-            }
-            scaleTrailFromDamage.Rescale();
+            projectile.transform.localScale = Vector3.one * (projectile.damage / 55f);
+            //ScaleTrailFromDamage? scaleTrailFromDamage = projectile.gameObject.GetComponent<ScaleTrailFromDamage>();
+            //if (scaleTrailFromDamage == null)
+            //{
+            //    projectile.gameObject.AddComponent<TrailRenderer>();
+            //    scaleTrailFromDamage = projectile.gameObject.AddComponent<ScaleTrailFromDamage>();
+            //}
+            //scaleTrailFromDamage.Rescale();
 
             // speed
             float bulletMass = projectile.damage / 55f;

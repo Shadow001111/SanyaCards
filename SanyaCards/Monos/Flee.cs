@@ -13,9 +13,9 @@ namespace SanyaCards.Monos
     {
         public static readonly float speedPercentBonus = 60.0f;
 
-        //static FieldInfo particleField = typeof(TasteOfBlood).GetField("part", BindingFlags.NonPublic | BindingFlags.Instance);
-        //static GameObject addObjectToPlayer = ((GameObject)Resources.Load("0 cards/TasteOfBlood")).GetComponent<CharacterStatModifiers>().AddObjectToPlayer;
-        //ParticleSystem speedBoostParticle;
+        static FieldInfo particleField = typeof(TasteOfBlood).GetField("part", BindingFlags.NonPublic | BindingFlags.Instance);
+        static GameObject addObjectToPlayer = ((GameObject)Resources.Load("0 cards/TasteOfBlood")).GetComponent<CharacterStatModifiers>().AddObjectToPlayer;
+        ParticleSystem speedBoostParticle;
 
         Player player;
 
@@ -25,17 +25,15 @@ namespace SanyaCards.Monos
         {
             player = GetComponentInParent<Player>();
 
-            //TasteOfBlood tasteOfBloodComponent = addObjectToPlayer.GetComponentInChildren<TasteOfBlood>();
-            //if (tasteOfBloodComponent == null)
+            //speedBoostParticle = addObjectToPlayer.GetComponentInChildren<ParticleSystem>(); // does get particle, but particle does nothin
+
+            //ParticleSystem[] particles = player.gameObject.GetComponentsInChildren<ParticleSystem>();
+            //foreach (ParticleSystem particle in particles)
             //{
-            //    UnityEngine.Debug.Log("tasteOfBloodComponent is null");
-            //}
-            //else
-            //{
-            //    speedBoostParticle = (ParticleSystem)particleField.GetValue(tasteOfBloodComponent);
-            //    if (speedBoostParticle == null)
+            //    if (particle.gameObject.name == "Effect")
             //    {
-            //        UnityEngine.Debug.Log("speedBoostParticle is null");
+            //        speedBoostParticle = particle; // it is working when TasteOfBlood card is picked
+            //        break;
             //    }
             //}
         }
