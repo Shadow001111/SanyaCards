@@ -24,7 +24,7 @@ namespace SanyaCards.Monos
         void Start()
         {
             player = GetComponentInParent<Player>();
-
+            // TODO: add effect
             //speedBoostParticle = addObjectToPlayer.GetComponentInChildren<ParticleSystem>(); // does get particle, but particle does nothin
 
             //ParticleSystem[] particles = player.gameObject.GetComponentsInChildren<ParticleSystem>();
