@@ -8,8 +8,9 @@ using UnityEngine;
 
 namespace SanyaCards.Monos
 {
-    // TODO: add hit effects (bullet destroying, barrier hit)
+    // TODO: add hit effects (barrier hit)
     // TODO: add barrier breaking effect
+    // TODO: maybe add progress bar for barrier
     class BarrierMono : ShieldTemplateMono
     {
         public static readonly float abilityCooldown = 15f;
@@ -51,7 +52,6 @@ namespace SanyaCards.Monos
 
         protected override bool bulletValidation(ProjectileHit projectile)
         {
-            return true;
             return projectile.ownPlayer.teamID != player.teamID && PlayerManager.instance.CanSeePlayer(projectile.transform.position, player).canSee;
         }
 

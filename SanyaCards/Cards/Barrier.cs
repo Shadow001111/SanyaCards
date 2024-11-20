@@ -39,7 +39,7 @@ namespace SanyaCards.Cards
         }
         protected override string GetDescription()
         {
-            return $"On block creates barrier that destroyes enemy bullets. Barrier durability depends on player health. Barrier health decays over time";
+            return "On block creates barrier that destroyes enemy bullets. Barrier durability depends on player health. Barrier health decays over time";
         }
         protected override GameObject GetCardArt()
         {

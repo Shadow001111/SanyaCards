@@ -36,7 +36,7 @@ namespace SanyaCards.Monos
 
             foreach (Player player in PlayerManager.instance.players)
             {
-                if (player.teamID == ignoreTeamID)
+                if (player.data.dead || player.teamID == ignoreTeamID)
                 {
                     continue;
                 }

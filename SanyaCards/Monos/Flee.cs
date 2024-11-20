@@ -1,4 +1,5 @@
-﻿using ModdingUtils.AIMinion.Patches;
+﻿using InControl;
+using ModdingUtils.AIMinion.Patches;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,17 +24,19 @@ namespace SanyaCards.Monos
         void Start()
         {
             player = GetComponentInParent<Player>();
-            
+
             //TasteOfBlood tasteOfBloodComponent = addObjectToPlayer.GetComponentInChildren<TasteOfBlood>();
             //if (tasteOfBloodComponent == null)
             //{
             //    UnityEngine.Debug.Log("tasteOfBloodComponent is null");
             //}
-
-            //speedBoostParticle = (ParticleSystem)particleField.GetValue(tasteOfBloodComponent);
-            //if (speedBoostParticle == null)
+            //else
             //{
-            //    UnityEngine.Debug.Log("speedBoostParticle is null");
+            //    speedBoostParticle = (ParticleSystem)particleField.GetValue(tasteOfBloodComponent);
+            //    if (speedBoostParticle == null)
+            //    {
+            //        UnityEngine.Debug.Log("speedBoostParticle is null");
+            //    }
             //}
         }
 
@@ -49,7 +52,7 @@ namespace SanyaCards.Monos
             {
                 foreach (Player other in PlayerManager.instance.players)
                 {
-                    if (other.teamID == player.teamID)
+                    if (other.data.dead || other.teamID == player.teamID)
                     {
                         continue;
                     }
