@@ -198,7 +198,7 @@ namespace SanyaCards.Monos
             return distanceToBottom;
         }
 
-        public void OnBlock(BlockTrigger.BlockTriggerType triggerType)
+        void OnBlock(BlockTrigger.BlockTriggerType triggerType)
         {
             if (triggerType != BlockTrigger.BlockTriggerType.Default || Time.time < abilityUseTime)
             {

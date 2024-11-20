@@ -44,7 +44,7 @@ namespace SanyaCards.Monos
             else if (Time.time >= splitTime)
             {
                 Shoot();
-                Destroy(transform.parent.gameObject);
+                Destroy(transform.parent.gameObject); // better use ProjectileHit.DestroyMe method
             }
         }
 

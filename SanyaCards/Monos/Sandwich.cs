@@ -54,7 +54,7 @@ namespace SanyaCards.Monos
             }
         }
 
-        public void OnBlock(BlockTrigger.BlockTriggerType triggerType)
+        void OnBlock(BlockTrigger.BlockTriggerType triggerType)
         {
             if (triggerType != BlockTrigger.BlockTriggerType.Default || Time.time < abilityUseTime || player.data.health >= player.data.maxHealth)
             {
