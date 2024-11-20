@@ -183,7 +183,6 @@ namespace SanyaCards.Monos
             player.data.block.BlockAction -= OnBlock;
         }
 
-        // TODO: maybe use reflectections of MapsExtended methods
         static Vector2 GetMapSize()
         {
             CustomMap customMap = MapManager.instance.GetCurrentCustomMap();

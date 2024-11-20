@@ -18,7 +18,7 @@ namespace SanyaCards.Cards
             //Edits values on card itself, which are then applied to the player in `ApplyCardStats`
             UnityEngine.Debug.Log($"[{SanyaCards.ModInitials}][Card] {GetTitle()} has been setup.");
 
-            cardInfo.allowMultiple = false; // TODO: make stackable
+            cardInfo.allowMultiple = false;
             statModifiers.health = (1.0f + 0.3f);
         }
         public override void OnAddCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)

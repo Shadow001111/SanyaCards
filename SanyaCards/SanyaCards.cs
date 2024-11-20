@@ -65,7 +65,7 @@ namespace SanyaCards
             CustomCard.BuildCard<HealthTaxesCard>();
 
             CustomCard.BuildCard<AcidShieldCard>(); // Bullets arent shrinking
-            CustomCard.BuildCard<BarrierCard>();
+            CustomCard.BuildCard<BarrierCard>(); // Bullets arent shrinking
             //CustomCard.BuildCard<SplitBulletCard>(); // BROKEN
 
             ModdingUtils.Utils.Cards.instance.AddCardValidationFunction(ExplosionResistanceCard.Validation);
