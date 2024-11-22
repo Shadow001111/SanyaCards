@@ -24,18 +24,10 @@ namespace SanyaCards.Monos
         void Start()
         {
             player = GetComponentInParent<Player>();
-            // TODO: add effect
-            //speedBoostParticle = addObjectToPlayer.GetComponentInChildren<ParticleSystem>(); // does get particle, but particle does nothin
-
-            //ParticleSystem[] particles = player.gameObject.GetComponentsInChildren<ParticleSystem>();
-            //foreach (ParticleSystem particle in particles)
-            //{
-            //    if (particle.gameObject.name == "Effect")
-            //    {
-            //        speedBoostParticle = particle; // it is working when TasteOfBlood card is picked
-            //        break;
-            //    }
-            //}
+            
+            speedBoostParticle = Instantiate(addObjectToPlayer.GetComponentInChildren<ParticleSystem>());
+            speedBoostParticle.transform.SetParent(player.transform);
+            speedBoostParticle.transform.localPosition = Vector3.zero;
         }
 
         void OnDisable()
@@ -84,7 +76,7 @@ namespace SanyaCards.Monos
             {
                 isActive = true;
                 player.data.stats.movementSpeed *= (1.0f + speedPercentBonus * 0.01f);
-                //speedBoostParticle.Play();
+                speedBoostParticle.Play();
             }
         }
 
@@ -94,7 +86,7 @@ namespace SanyaCards.Monos
             {
                 isActive = false;
                 player.data.stats.movementSpeed /= (1.0f + speedPercentBonus * 0.01f);
-                //speedBoostParticle.Stop();
+                speedBoostParticle.Stop();
             }
         }
     }
