@@ -27,18 +27,18 @@ namespace SanyaCards
     {
         private const string ModId = "com.Shadow.SanyaCards";
         private const string ModName = "SanyaCards";
-        public const string Version = "0.10.0";
+        public const string Version = "0.10.1";
         public const string ModInitials = "SANYA";
 
         public static SanyaCards instance { get; private set; }
 
-        void Awake()
+        public void Awake()
         {
             var harmony = new Harmony(ModId);
             harmony.PatchAll();
         }
 
-        void Start()
+        public void Start()
         {
             instance = this;
             //Unbound.RegisterCredits();
